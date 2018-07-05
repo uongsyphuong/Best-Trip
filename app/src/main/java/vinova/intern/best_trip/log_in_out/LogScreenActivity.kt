@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentManager
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_log_screen.*
 import kotlinx.android.synthetic.main.app_bar_log_screen.*
+import kotlinx.android.synthetic.main.content_log_screen.*
 import vinova.intern.best_trip.R
 import vinova.intern.best_trip.adapter.PageAdapter
 
@@ -53,6 +54,7 @@ class LogScreenActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
 	fun changeTab(){
 		var manager:FragmentManager = supportFragmentManager
 		var adapter : PageAdapter = PageAdapter(manager)
-//		viewPager.adapter = adapter
+		viewPager.adapter = adapter
+
 	}
 }

@@ -15,7 +15,7 @@
     <!--navigation bar-->
     <string name="home" >Home</string>
     <string name="taxi">Taxi Fare &amp; Charges</string>
-    <string name="out">Logout</string>
+    <string name="out">Sign Out</string>
     <string name="title_activity_log_screen">LogScreenActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
