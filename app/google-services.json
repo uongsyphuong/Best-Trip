@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "267474015252",
+    "firebase_url": "https://best-trip-c5568.firebaseio.com",
+    "project_id": "best-trip-c5568",
+    "storage_bucket": "best-trip-c5568.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:267474015252:android:512aead1855b2973",
+        "android_client_info": {
+          "package_name": "vinova.intern.best_trip"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "267474015252-nnvnrh99f1b5km1t9tlpv2ulidcf2h0n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB59jRkaB4Gu0ck5MUsv7S3cmTRvUJuCh0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
