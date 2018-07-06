@@ -38,4 +38,20 @@
 
     <!--google map-->
     <string name="google_maps_key">AIzaSyBdsE3_CUMeIiWB2gxKQpjL2fpM6lo0gPs</string>
+    <string name="free_breakdown">Free Breakdown</string>
+
+    <string name="location">Location</string>
+    <string name="destination">Destination</string>
+    <string name="open_door">Open door</string>
+    <string name="near">First 30km</string>
+    <string name="far">Over 30km</string>
+    <string name="fee_open_door">11.000/500m</string>
+    <string name="fee_first">14.500/1km</string>
+    <string name="fee_over">11.600/1km</string>
+    <string name="about">About</string>
+    <string name="trip_info">Trip info</string>
+    <string name="distance">Distance</string>
+    <string name="xnxx">xnxx</string>
+    <string name="time">Time</string>
+    <string name="describe_taxi">Describe Taxi</string>
 </resources>
