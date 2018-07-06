@@ -2,10 +2,11 @@ package vinova.intern.best_trip.signIn
 
 import com.facebook.login.LoginResult
 import com.google.firebase.auth.FirebaseAuth
-import vinova.intern.best_trip.baseInterface.interfaceBase
+import vinova.intern.best_trip.baseInterface.BasePresenter
+import vinova.intern.best_trip.baseInterface.BaseView
 
 interface SignInInterface {
-    interface View:interfaceBase<Presenter>{
+    interface View:BaseView<Presenter>{
         fun signInSuccess()
     }
     interface Presenter{
