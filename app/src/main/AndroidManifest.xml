@@ -48,7 +48,7 @@
         </activity>
         <activity
             android:name=".log_in_out.LogScreenActivity"
-            android:label="@string/title_activity_log_screen"
+            android:label=""
             android:theme="@style/AppTheme.NoActionBar" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -63,8 +63,8 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".MapActivity"
-            android:label="@string/title_activity_map"></activity>
+            android:name=".map.MapActivity"
+            android:label="@string/title_activity_map"/>
     </application>
 
 </manifest>

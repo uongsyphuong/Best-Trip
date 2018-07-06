@@ -28,4 +28,6 @@
     <string name="slogan">Cuộc dời là những chuyến đi chuyến đi thì có Best Trip đồng hành</string>
     <string name="title_activity_map">Results-Map</string>
 
+    <!--google map-->
+    <string name="google_maps_key">AIzaSyBdsE3_CUMeIiWB2gxKQpjL2fpM6lo0gPs</string>
 </resources>
