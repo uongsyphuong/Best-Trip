@@ -28,4 +28,12 @@
     <string name="slogan">Cuộc dời là những chuyến đi chuyến đi thì có Best Trip đồng hành</string>
     <string name="title_activity_map">Results-Map</string>
 
+
+
+    <string name="text_reset">Enter your email address to reset password</string>
+    <string name="email_address">Email address</string>
+    <string name="send">Send</string>
+    <string name="mai_linh">Mai Linh</string>
+    <string name="phone_mailinh">0888888</string>
+
 </resources>
