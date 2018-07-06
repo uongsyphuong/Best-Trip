@@ -5,10 +5,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.Toast
+import android.widget.*
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import vinova.intern.best_trip.R
 import vinova.intern.best_trip.forgotPassword.ForgetPassActivity
@@ -20,8 +18,8 @@ class SignInActivity : Fragment(),SignInInterface.View {
 	var emailBtn : Button? = null
 	var user : EditText? = null
 	var pass : EditText? = null
-	var forgetBtn : Button? = null
-
+	var forgetBtn : TextView? = null
+	var layout : ConstraintLayout? = null
 	override fun signInSuccess() {
 		goToMapActivity()
 	}
@@ -44,11 +42,13 @@ class SignInActivity : Fragment(),SignInInterface.View {
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
+		layout = view.findViewById(R.id.signIn)
 		imgbtn = view.findViewById(R.id.logInFacebook)
 		emailBtn = view.findViewById(R.id.btnEmail)
 		user = view.findViewById(R.id.email)
 		pass = view.findViewById(R.id.password)
 		forgetBtn = view.findViewById(R.id.forgot_password)
+
 		setListener()
 	}
 	fun goToMapActivity(){
@@ -65,7 +65,9 @@ class SignInActivity : Fragment(),SignInInterface.View {
 			mPresenter.loginUser(user_name,password)
 		}
 		forgetBtn?.setOnClickListener {
-			startActivity(Intent(context,ForgetPassActivity::class.java))
+			val frag = ForgetPassActivity()
+			layout?.visibility = View.GONE
+			fragmentManager?.beginTransaction()?.replace(R.id.forget_frag,frag)?.addToBackStack(null)?.commit()
 		}
 	}
 }
