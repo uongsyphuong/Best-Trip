@@ -13,7 +13,7 @@
     <string name="sign_up_with_email">Sign up with email</string>
 
     <!--navigation bar-->
-    <string name="home" >Home</string>
+    <string name="home">Home</string>
     <string name="taxi">Taxi Fare &amp; Charges</string>
     <string name="out">Log out</string>
     <string name="title_activity_log_screen">LogScreenActivity</string>
@@ -26,5 +26,6 @@
     <string name="best_trip">Best Trip</string>
     <string name="best_trip_with_us">Best trip with us</string>
     <string name="slogan">Cuộc dời là những chuyến đi chuyến đi thì có Best Trip đồng hành</string>
+    <string name="title_activity_map">Results-Map</string>
 
 </resources>
