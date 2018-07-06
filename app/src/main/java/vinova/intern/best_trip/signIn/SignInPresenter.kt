@@ -6,14 +6,13 @@ import com.facebook.login.LoginResult
 import com.google.firebase.auth.FacebookAuthProvider
 
 
-class SignInPresenter:SignInInterface.Presenter{
-    var mView: SignInInterface.View? = null
+class SignInPresenter(view: SignInInterface.View) :SignInInterface.Presenter{
+    var mView: SignInInterface.View? = view
     lateinit var mAuth: FirebaseAuth
 
 
-    fun SignInPresenter(view: SignInInterface.View)  {
-        this.mView = view
-        mView!!.setPresenter(this)
+    init {
+        mView?.setPresenter(this)
     }
 
     override fun loginUser(email:String, pass:String) {

@@ -1,9 +1,10 @@
-package vinova.intern.best_trip
+package vinova.intern.best_trip.logo
 
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
+import vinova.intern.best_trip.R
 import vinova.intern.best_trip.log_in_out.LogScreenActivity
 
 class LogoActivity : AppCompatActivity() {

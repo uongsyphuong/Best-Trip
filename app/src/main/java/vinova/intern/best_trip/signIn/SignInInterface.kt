@@ -9,7 +9,7 @@ interface SignInInterface {
     interface View:BaseView<Presenter>{
         fun signInSuccess()
     }
-    interface Presenter{
+    interface Presenter:BasePresenter{
         fun loginUser(email:String, pass:String)
         fun handleFacebookAccessToken(loginResult:LoginResult)
     }
