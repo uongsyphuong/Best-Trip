@@ -36,4 +36,6 @@
     <string name="mai_linh">Mai Linh</string>
     <string name="phone_mailinh">0888888</string>
 
+    <!--google map-->
+    <string name="google_maps_key">AIzaSyBdsE3_CUMeIiWB2gxKQpjL2fpM6lo0gPs</string>
 </resources>
