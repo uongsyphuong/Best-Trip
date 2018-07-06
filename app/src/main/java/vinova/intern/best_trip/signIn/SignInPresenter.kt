@@ -1,25 +1,24 @@
 package vinova.intern.best_trip.signIn
 
-import android.content.ContentValues.TAG
-import android.content.Context
-import android.util.Log
-import android.widget.Toast
+
 import com.google.firebase.auth.FirebaseAuth
-import androidx.annotation.NonNull
 import com.facebook.login.LoginResult
 import com.google.firebase.auth.FacebookAuthProvider
 
 
 class SignInPresenter:SignInInterface.Presenter{
     var mView: SignInInterface.View? = null
+    lateinit var mAuth: FirebaseAuth
+
 
     fun SignInPresenter(view: SignInInterface.View)  {
         this.mView = view
         mView!!.setPresenter(this)
     }
 
-    override fun loginUser(mAuth: FirebaseAuth, email:String, pass:String) {
-        mAuth.signInWithEmailAndPassword(email,pass)
+    override fun loginUser(email:String, pass:String) {
+        FirebaseAuth.getInstance()
+                .signInWithEmailAndPassword(email,pass)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         mView!!.signInSuccess()
@@ -30,10 +29,11 @@ class SignInPresenter:SignInInterface.Presenter{
                 }
     }
 
-    override fun handleFacebookAccessToken(loginResult: LoginResult, mAuth: FirebaseAuth) {
+    override fun handleFacebookAccessToken(loginResult: LoginResult) {
         val token = loginResult.accessToken
         val credential = FacebookAuthProvider.getCredential(token.token)
-        mAuth.signInWithCredential(credential)
+        FirebaseAuth.getInstance()
+                .signInWithCredential(credential)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         //val user = mAuth.currentUser

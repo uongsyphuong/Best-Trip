@@ -10,8 +10,8 @@ interface SignInInterface {
         fun signInSuccess()
     }
     interface Presenter{
-        fun loginUser(mAuth:FirebaseAuth, email:String, pass:String)
-        fun handleFacebookAccessToken(loginResult:LoginResult, mAuth: FirebaseAuth)
+        fun loginUser(email:String, pass:String)
+        fun handleFacebookAccessToken(loginResult:LoginResult)
     }
 
 }
