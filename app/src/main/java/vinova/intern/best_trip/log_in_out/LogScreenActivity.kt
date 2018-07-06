@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.FragmentManager
 import com.google.android.material.navigation.NavigationView
+import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.activity_log_screen.*
 import kotlinx.android.synthetic.main.app_bar_log_screen.*
 import kotlinx.android.synthetic.main.content_log_screen.*
@@ -24,6 +25,7 @@ class LogScreenActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
 		drawer_layout.addDrawerListener(toggle)
 		toggle.syncState()
 		nav_view.setNavigationItemSelectedListener(this)
+		changeTab()
 	}
 
 	override fun onBackPressed() {
@@ -52,9 +54,11 @@ class LogScreenActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
 	}
 
 	fun changeTab(){
-		var manager:FragmentManager = supportFragmentManager
-		var adapter : PageAdapter = PageAdapter(manager)
+		val manager:FragmentManager = supportFragmentManager
+		val adapter = PageAdapter(manager)
 		viewPager.adapter = adapter
-
+		tabLayout.setupWithViewPager(viewPager)
+		viewPager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
+		tabLayout.setTabsFromPagerAdapter(adapter)
 	}
 }

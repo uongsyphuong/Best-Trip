@@ -8,7 +8,7 @@
     tools:context=".log_in_out.LogScreenActivity"
     tools:showIn="@layout/app_bar_log_screen"
     tools:ignore="MissingDefaultResource"
-    android:background="@mipmap/background">
+    android:background= "@mipmap/background">
 
     <TextView
         android:id="@+id/best_trip"
@@ -34,8 +34,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:text="Cuộc dời là những chuyến đi
- Chuyến đi thì có Best Trip đồng hành"
+        android:text="@string/slogan"
         android:textAlignment="center"
         android:textSize="20sp"
         android:textColor="#0000CC"
@@ -62,6 +61,9 @@
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tabLayout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
