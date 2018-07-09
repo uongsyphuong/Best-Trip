@@ -1,4 +1,26 @@
 package vinova.intern.best_trip.model
 
-data class Taxi(val name:String, val phone:String, val logo:String, val about:String, val fee:List<Fee>)
-data class Fee(val first:Double, val after:Double)
+class Taxi{
+    var name: String? = null
+    val phone:String = ""
+    val logo:String = ""
+    var about:String = ""
+    var fourSeaters: HashMap<String,Long>? =null
+    var sevenSeaters: HashMap<String,Long>? = null
+
+    constructor()
+
+}
+
+class Fee{
+    var open_door:Int = 0
+    var first:Int = 0
+    var after:Int = 0
+    constructor(){}
+    constructor(open_door: Int, first: Int, after: Int) {
+        this.open_door = open_door
+        this.first = first
+        this.after = after
+    }
+
+}
