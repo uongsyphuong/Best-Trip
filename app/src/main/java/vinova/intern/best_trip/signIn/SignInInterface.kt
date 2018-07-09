@@ -1,7 +1,6 @@
 package vinova.intern.best_trip.signIn
 
 import com.facebook.login.LoginResult
-import com.google.firebase.auth.FirebaseAuth
 import vinova.intern.best_trip.baseInterface.BasePresenter
 import vinova.intern.best_trip.baseInterface.BaseView
 
@@ -10,7 +9,7 @@ interface SignInInterface {
         fun signInSuccess()
     }
     interface Presenter:BasePresenter{
-        fun loginUser(email:String, pass:String)
+        fun loginUser(email:String?, pass:String?)
         fun handleFacebookAccessToken(loginResult:LoginResult)
     }
 

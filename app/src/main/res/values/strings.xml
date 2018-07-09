@@ -54,4 +54,6 @@
     <string name="xnxx">xnxx</string>
     <string name="time">Time</string>
     <string name="describe_taxi">Describe Taxi</string>
+    <string name="log_in_with_facebook">Log In with FaceBook</string>
+    <string name="map">map</string>
 </resources>
