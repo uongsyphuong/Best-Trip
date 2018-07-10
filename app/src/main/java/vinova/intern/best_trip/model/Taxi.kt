@@ -11,16 +11,3 @@ class Taxi{
     constructor()
 
 }
-
-class Fee{
-    var open_door:Int = 0
-    var first:Int = 0
-    var after:Int = 0
-    constructor(){}
-    constructor(open_door: Int, first: Int, after: Int) {
-        this.open_door = open_door
-        this.first = first
-        this.after = after
-    }
-
-}

@@ -11,9 +11,24 @@ import android.text.method.TextKeyListener.clear
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
+import java.util.ArrayList
 
- class DataAdapter(var context: Context) : RecyclerView.Adapter<DataAdapter.DataViewHolder>() {
-     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataViewHolder {
+class DataAdapter: RecyclerView.Adapter<DataAdapter.DataViewHolder> {
+    var search: String = ""
+    lateinit var arrayList: ArrayList<String>
+
+    lateinit var context:Context
+
+    constructor(context: Context, arrayList:ArrayList<String> ) {
+        this.context = context
+        this.arrayList = arrayList
+        this.search = ""
+     }
+    constructor(context: Context){
+        this.context = context
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataViewHolder {
          return DataViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_taxi, parent, false))
 
      }
@@ -52,5 +67,10 @@ import com.bumptech.glide.Glide
          taxiList.clear()
          taxiList = data
          notifyDataSetChanged()
+     }
+
+     fun notifyDataSetChangedWithSearch(search: String) {
+         this.search = search
+         super.notifyDataSetChanged()
      }
  }
