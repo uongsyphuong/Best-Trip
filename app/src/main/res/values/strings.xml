@@ -2,7 +2,7 @@
     <string name="app_name">Best Trip</string>
     <!--for login face-->
     <string name="facebook_app_id">2032403220409437</string>
-    <string name="fb_login_protocol_scheme">fb2032403220409437</string>
+    <string name="fb_login_protocol_scheme">cc454fb14420074c4821b9e488071adf</string>
 
     <!--sign up and sign in string-->
     <string name="password_login">Password</string>

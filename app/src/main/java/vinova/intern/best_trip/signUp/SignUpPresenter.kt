@@ -14,7 +14,6 @@ class SignUpPresenter(view: SignUpInterface.View) :SignUpInterface.Presenter {
         mView?.setPresenter(this)
     }
 
-
     override fun createNewAccount(username:String,email: String, pass: String) {
         val mDatabaseReference: DatabaseReference? = FirebaseDatabase.getInstance().reference
         mAuth= FirebaseAuth.getInstance()
@@ -26,8 +25,10 @@ class SignUpPresenter(view: SignUpInterface.View) :SignUpInterface.Presenter {
 
                         //Verify Email
                         val mUser = mAuth.currentUser
+                        mView?.showLoading(true)
                         mUser?.sendEmailVerification()?.addOnCompleteListener { task1 ->
                             if (task1.isSuccessful) {
+                                mView?.showLoading(false)
                                 mView?.signUpSuccess()
                             } else {
                                 mView?.showError("Failed to verify")

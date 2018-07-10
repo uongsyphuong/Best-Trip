@@ -6,7 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.FrameLayout
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
+import androidx.viewpager.widget.ViewPager
 import vinova.intern.best_trip.R
 
 class ForgetPassActivity: Fragment(),ForgetPassInterface.View{
@@ -15,7 +18,8 @@ class ForgetPassActivity: Fragment(),ForgetPassInterface.View{
     var btnReset : Button? = null
 
     override fun success() {
-
+        activity?.findViewById<ViewPager>(R.id.viewPager)?.getChildAt(0)?.findViewById<ConstraintLayout>(R.id.signIn)?.visibility = View.VISIBLE
+        activity?.findViewById<ViewPager>(R.id.viewPager)?.getChildAt(0)?.findViewById<FrameLayout>(R.id.forget_frag)?.visibility = View.GONE
     }
 
     override fun setPresenter(presenter: ForgetPassInterface.Presenter) {

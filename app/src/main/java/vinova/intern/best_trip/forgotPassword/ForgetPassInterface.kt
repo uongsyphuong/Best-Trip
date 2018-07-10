@@ -10,6 +10,5 @@ interface ForgetPassInterface {
 
     interface Presenter : BasePresenter {
         fun sendPasswordResetEmail(email: String)
-
     }
 }
