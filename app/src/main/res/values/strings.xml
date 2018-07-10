@@ -2,15 +2,15 @@
     <string name="app_name">Best Trip</string>
     <!--for login face-->
     <string name="facebook_app_id">2032403220409437</string>
-    <string name="fb_login_protocol_scheme">fb2032403220409437</string>
+    <string name="fb_login_protocol_scheme">cc454fb14420074c4821b9e488071adf</string>
 
     <!--sign up and sign in string-->
     <string name="password_login">Password</string>
     <string name="email_login">Email address</string>
-    <string name="login_with_email">Login with email</string>
+    <string name="login_with_email">Login</string>
     <string name="forgot_password">Forgot password?</string>
     <string name="username">Username</string>
-    <string name="sign_up_with_email">Sign up with email</string>
+    <string name="sign_up_with_email">Sign up</string>
 
     <!--navigation bar-->
     <string name="home">Home</string>
@@ -25,7 +25,7 @@
     <string name="action_settings">Settings</string>
     <string name="best_trip">Best Trip</string>
     <string name="best_trip_with_us">Best trip with us</string>
-    <string name="slogan">Cuộc dời là những chuyến đi chuyến đi thì có Best Trip đồng hành</string>
+    <string name="slogan">Cuộc đời là những chuyến đi chuyến đi thì có Best Trip đồng hành</string>
     <string name="title_activity_map">Results-Map</string>
 
 

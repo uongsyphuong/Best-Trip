@@ -30,8 +30,10 @@ import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_log_screen.*
 import kotlinx.android.synthetic.main.app_bar_map.*
 import kotlinx.android.synthetic.main.content_map.*
+import kotlinx.android.synthetic.main.nav_header_log_screen.*
 import vinova.intern.best_trip.R
 import vinova.intern.best_trip.log_in_out.LogScreenActivity
+
 
 class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNavigationItemSelectedListener,MapInterface.View {
 	var mapPresenter : MapInterface.Presenter = MapPresenter(this)
@@ -52,20 +54,18 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 		setNavigationDrawer()
 		animation()
 
+		val autocompleteFragment : PlaceAutocompleteFragment = (PlaceAutocompleteFragment())
+		supportFragmentManager.findFragmentById(R.id.place_autocomplete_fragment)
 
-		val autocompleteFragment : PlaceAutocompleteFragment  = (PlaceAutocompleteFragment())
-		fragmentManager.findFragmentById(R.id.place_autocomplete_fragment)
-
-		autocompleteFragment?.setOnPlaceSelectedListener(object : PlaceSelectionListener {
+		autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
 			override fun onPlaceSelected(place : Place) {
-				mMap.addMarker(MarkerOptions().position(place.getLatLng()).title(place.getName().toString()))
-				mMap.moveCamera(CameraUpdateFactory.newLatLng(place.getLatLng()))
-				mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(place.getLatLng(), 12.0f))
+				mMap.addMarker(MarkerOptions().position(place.latLng).title(place.name.toString()))
+				mMap.moveCamera(CameraUpdateFactory.newLatLng(place.latLng))
+				mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(place.latLng, 12.0f))
 			}
 
 			override fun onError(p0: Status?) {
-				val faa = 100
-				val lo : Long = 12003216
+
 			}
 		})
 	}
@@ -166,6 +166,12 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 		nav_view.setNavigationItemSelectedListener(this)
 	}
 
+	private fun setListener(){
+		image_profile.setOnClickListener {
+
+		}
+	}
+
 	override fun onCreateOptionsMenu(menu: Menu?): Boolean {
 		menuInflater.inflate(R.menu.log_screen,menu)
 		return true
@@ -190,6 +196,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 	}
 
 	override fun onNavigationItemSelected(item: MenuItem): Boolean {
+		drawer_layout.closeDrawer(GravityCompat.START)
 		when (item.itemId) {
 			R.id.home -> {
 				// Handle the camera action
@@ -201,12 +208,11 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 				mapPresenter.signOut()
 			}
 		}
-		drawer_layout.closeDrawer(GravityCompat.START)
 		return true
 	}
 
 	override fun goToLogScreen() {
-		startActivity(Intent(this,LogScreenActivity::class.java))
+		startActivity(Intent(this, LogScreenActivity::class.java))
 		overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right)
 		finish()
 	}
