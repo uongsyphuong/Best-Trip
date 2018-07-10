@@ -19,6 +19,7 @@
         android:hint="@string/edt_search"
         android:inputType="textAutoCorrect"
         android:textSize="14sp"
+        android:cursorVisible="false"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
