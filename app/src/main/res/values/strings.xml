@@ -56,4 +56,6 @@
     <string name="describe_taxi">Describe Taxi</string>
     <string name="log_in_with_facebook">Log In with FaceBook</string>
     <string name="map">map</string>
+    <string name="from_camera">From camera</string>
+    <string name="from_gallery">From Gallery</string>
 </resources>
