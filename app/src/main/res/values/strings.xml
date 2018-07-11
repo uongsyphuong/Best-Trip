@@ -57,6 +57,11 @@
     <string name="log_in_with_facebook">Log In with FaceBook</string>
     <string name="map">map</string>
 
+    <!--avatar-->
+    <string name="from_camera">From camera</string>
+    <string name="from_gallery">From Gallery</string>
+
+    <!--search taxi list-->
     <string name="edt_search">Search..</string>
     <string name="no_matches">No Matches</string>
 

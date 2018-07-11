@@ -1,25 +1,28 @@
 package vinova.intern.best_trip.map
 
 import android.Manifest
+import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.location.Location
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.widget.RelativeLayout
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
-import com.google.android.gms.common.api.Status
-import com.google.android.gms.location.places.Place
-import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment
-import com.google.android.gms.location.places.ui.PlaceSelectionListener
+import androidx.drawerlayout.widget.DrawerLayout
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException
+import com.google.android.gms.common.GooglePlayServicesRepairableException
+import com.google.android.gms.location.places.ui.PlaceAutocomplete
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -27,48 +30,47 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.navigation.NavigationView
-import kotlinx.android.synthetic.main.activity_log_screen.*
-import kotlinx.android.synthetic.main.app_bar_map.*
-import kotlinx.android.synthetic.main.content_map.*
-import kotlinx.android.synthetic.main.nav_header_log_screen.*
 import vinova.intern.best_trip.R
 import vinova.intern.best_trip.log_in_out.LogScreenActivity
 import vinova.intern.best_trip.taxiList.TaxiListActivity
 
 
 class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNavigationItemSelectedListener,MapInterface.View {
-	var mapPresenter : MapInterface.Presenter = MapPresenter(this)
+	private var mapPresenter : MapInterface.Presenter = MapPresenter(this,this)
 
 	private lateinit var mMap: GoogleMap
 	private val LOCATION_PERMISSION_REQUEST_CODE = 1
+	private val CAMERA_REQUEST = 1888
+	private val MY_CAMERA_PERMISSION_CODE = 100
+	private val PLACE_AUTO_COMPLETE = 2
 
 	private var slideUp : Animation? = null
 	private var slideDown : Animation? = null
-	var change = true
+	private var show = false
+	var camera : TextView? = null
+	var gallery : TextView? = null
+
+	var startLat:Double = 0.0
+	var startLong : Double = 0.0
+	var endLat : Double = 10.8778458
+	var endLong : Double = 106.8072295
+
+	var toolbar : Toolbar? = null
+	var nav_view : NavigationView? = null
+	var search_place : EditText? = null
+	var drawer_layout: DrawerLayout? = null
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_map)
+		toolbar = findViewById(R.id.toolbar)
 		setSupportActionBar(toolbar)
 		// Obtain the SupportMapFragment and get notified when the map is ready to be used.
 		setMyLocationButton()
 		setNavigationDrawer()
 		animation()
 
-		val autocompleteFragment : PlaceAutocompleteFragment = (PlaceAutocompleteFragment())
-		supportFragmentManager.findFragmentById(R.id.place_autocomplete_fragment)
-
-		autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
-			override fun onPlaceSelected(place : Place) {
-				mMap.addMarker(MarkerOptions().position(place.latLng).title(place.name.toString()))
-				mMap.moveCamera(CameraUpdateFactory.newLatLng(place.latLng))
-				mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(place.latLng, 12.0f))
-			}
-
-			override fun onError(p0: Status?) {
-
-			}
-		})
+		setListener()
 	}
 
 	/**
@@ -87,6 +89,21 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 		enableMyLocationIfPermitted()
 
 		mMap.setMinZoomPreference(11f)
+		mMap.setMaxZoomPreference(100f)
+
+//		val origin : LatLng = LatLng(startLat,startLong)
+//		val destination : LatLng = LatLng(endLat,endLong)
+//		DrawRouteMaps.getInstance(this)
+//				.draw(origin,destination,mMap)
+//		DrawMarker.getInstance(this).draw(mMap,destination,R.drawable.ic_placeholder,"Destination")
+//		val bounds = LatLngBounds.builder()
+//				.include(origin)
+//				.include(destination)
+//				.build()
+//		val displays = Point()
+//		windowManager.defaultDisplay.getSize(displays)
+//		mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds,displays.x,250,30))
+
 	}
 
 	private fun enableMyLocationIfPermitted() {
@@ -118,6 +135,15 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 				}
 				return
 			}
+			MY_CAMERA_PERMISSION_CODE ->{
+				if (grantResults[0] === PackageManager.PERMISSION_GRANTED) {
+					Toast.makeText(this, "camera permission granted", Toast.LENGTH_LONG).show()
+					val cameraIntent = Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE)
+					startActivityForResult(cameraIntent, CAMERA_REQUEST)
+				} else {
+					Toast.makeText(this, "camera permission denied", Toast.LENGTH_LONG).show()
+				}
+			}
 		}
 	}
 
@@ -127,19 +153,11 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 	}
 
 	private val onMyLocationClickListener = GoogleMap.OnMyLocationClickListener { location ->
-		mMap.setMinZoomPreference(12f)
-
-//		val circleOptions = CircleOptions()
-//		circleOptions.center(LatLng(location.latitude,
-//				location.longitude))
-//
-//		circleOptions.radius(200.0)
-//		circleOptions.fillColor(Color.RED)
-//		circleOptions.strokeWidth(6f)
-//		mMap.addCircle(circleOptions)
-
 		mMap.addMarker(MarkerOptions().position(LatLng(location.latitude,
 				location.longitude)))
+		startLat = location.latitude
+		startLong = location.longitude
+		calculateDis(endLat,endLong)
 	}
 
 	private fun animation(){
@@ -160,17 +178,94 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 	}
 
 	private fun setNavigationDrawer(){
+		drawer_layout = findViewById<DrawerLayout>(R.id.drawer_layout)
+		nav_view = findViewById(R.id.nav_view)
 		val toggle = ActionBarDrawerToggle(
 				this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-		drawer_layout.addDrawerListener(toggle)
+		drawer_layout?.addDrawerListener(toggle)
 		toggle.syncState()
-		nav_view.setNavigationItemSelectedListener(this)
+		nav_view?.setNavigationItemSelectedListener(this)
 	}
 
 	private fun setListener(){
-		image_profile.setOnClickListener {
+		gallery = findViewById<NavigationView>(R.id.nav_view).getHeaderView(0).findViewById<TextView>(R.id.gallery)
+		camera = findViewById<NavigationView>(R.id.nav_view).getHeaderView(0).findViewById<TextView>(R.id.camera)
+		findViewById<NavigationView>(R.id.nav_view).getHeaderView(0).findViewById<ImageView>(R.id.image_profile).
+				setOnClickListener {
+					if (show){
+						camera?.visibility = View.GONE
+						gallery?.visibility = View.GONE
+						show = false
+					}
+					else{
+						show = true
+						camera?.visibility = View.VISIBLE
+						gallery?.visibility = View.VISIBLE
+					}
+				}
 
+		gallery?.setOnClickListener {
+					val intent = Intent()
+					intent.type = "image/*"
+					intent.action = Intent.ACTION_GET_CONTENT
+					startActivityForResult(Intent.createChooser(intent, "Select Picture"), 1)
+				}
+
+		camera?.setOnClickListener{
+			if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+
+				requestPermissions(arrayOf(Manifest.permission.CAMERA), MY_CAMERA_PERMISSION_CODE)
+
+			}
+			else {
+				val cameraIntent = Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE)
+				startActivityForResult(cameraIntent, CAMERA_REQUEST)
+			}
 		}
+
+		search_place = findViewById(R.id.search_place)
+		search_place?.setOnClickListener{
+			try {
+				val inten = PlaceAutocomplete.IntentBuilder(
+						PlaceAutocomplete.MODE_OVERLAY
+				).build(this)
+				startActivityForResult(inten,PLACE_AUTO_COMPLETE)
+			}catch (e : GooglePlayServicesNotAvailableException){
+
+			}catch (e : GooglePlayServicesRepairableException){
+
+			}
+		}
+
+	}
+
+	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+		super.onActivityResult(requestCode, resultCode, data)
+		if (requestCode == 1 && data!= null){
+			mapPresenter.selectImg(data,contentResolver)
+		}
+		if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK && data!=null ) {
+            mapPresenter.takePhoto(data,contentResolver)
+		}
+		if (requestCode == PLACE_AUTO_COMPLETE && resultCode == Activity.RESULT_OK){
+			val place = PlaceAutocomplete.getPlace(this,data)
+			mMap.clear()
+			mapPresenter.drawRoute("$startLat,$startLong","${place.latLng.latitude},${place.latLng.longitude}")
+			mMap.addMarker(MarkerOptions().position(place.latLng).title(place.name.toString()))
+			mMap.moveCamera(CameraUpdateFactory.newLatLng(place.latLng))
+			mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(place.latLng, 12.0f))
+			search_place?.setText(place.name)
+		}
+	}
+
+
+	override fun setImg(bitmap: Bitmap) {
+		val imageView : ImageView =  findViewById<NavigationView>(R.id.nav_view).getHeaderView(0)
+				.findViewById(vinova.intern.best_trip.R.id.image_profile)
+		imageView.setImageBitmap(bitmap)
+		camera?.visibility = View.GONE
+		gallery?.visibility = View.GONE
+		show = false
 	}
 
 	override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -180,24 +275,13 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 
 	override fun onOptionsItemSelected(item: MenuItem?): Boolean {
 		when(item?.itemId){
-			R.id.toMap -> {
-				if (change){
-					showResult.startAnimation(slideUp)
-					showResult.visibility = View.GONE
-					change = !change
-				}
-				else{
-					showResult.visibility = View.VISIBLE
-					showResult.startAnimation(slideDown)
-					change = !change
-				}
-			}
+			R.id.toMap -> { }
 		}
 		return super.onOptionsItemSelected(item)
 	}
 
 	override fun onNavigationItemSelected(item: MenuItem): Boolean {
-		drawer_layout.closeDrawer(GravityCompat.START)
+		drawer_layout?.closeDrawer(GravityCompat.START)
 		when (item.itemId) {
 			R.id.home -> {
 				// Handle the camera action
@@ -233,5 +317,11 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 
 	}
 
+	private fun calculateDis(lat: Double, long: Double): Float {
+		var result = FloatArray(10)
+		Location.distanceBetween(startLat,startLong,lat,long,result)
+		Toast.makeText(this,"Distance ${result[0]}",Toast.LENGTH_LONG).show()
+		return result[0]
+	}
 
 }

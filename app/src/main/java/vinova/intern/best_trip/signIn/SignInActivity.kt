@@ -81,6 +81,7 @@ class SignInActivity : Fragment(),SignInInterface.View{
 
 	fun setListener(){
 		imgbtn?.setOnClickListener {
+			face?.fragment = this
 			callBackManager = CallbackManager.Factory.create()
 			face?.setReadPermissions("email")
             face?.fragment = this
@@ -101,7 +102,7 @@ class SignInActivity : Fragment(),SignInInterface.View{
 		emailBtn?.setOnClickListener{
 			val user_name = user?.text.toString()
 			val password = pass?.text.toString()
-			mPresenter.loginUser("nhom3@gmail.com","123456")
+			mPresenter.loginUser(user_name,password)
 		}
 		forgetBtn?.setOnClickListener {
 			layout?.visibility = View.GONE
