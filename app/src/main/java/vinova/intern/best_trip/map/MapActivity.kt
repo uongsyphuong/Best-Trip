@@ -12,15 +12,14 @@ import android.view.MenuItem
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.widget.ImageView
-import android.widget.RelativeLayout
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException
 import com.google.android.gms.common.GooglePlayServicesRepairableException
 import com.google.android.gms.location.places.ui.PlaceAutocomplete
@@ -31,9 +30,6 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.navigation.NavigationView
-import kotlinx.android.synthetic.main.activity_log_screen.*
-import kotlinx.android.synthetic.main.app_bar_map.*
-import kotlinx.android.synthetic.main.content_map.*
 import vinova.intern.best_trip.R
 import vinova.intern.best_trip.log_in_out.LogScreenActivity
 
@@ -58,9 +54,15 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 	var endLat : Double = 10.8778458
 	var endLong : Double = 106.8072295
 
+	var toolbar : Toolbar? = null
+	var nav_view : NavigationView? = null
+	var search_place : EditText? = null
+	var drawer_layout: DrawerLayout? = null
+
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_map)
+		toolbar = findViewById(R.id.toolbar)
 		setSupportActionBar(toolbar)
 		// Obtain the SupportMapFragment and get notified when the map is ready to be used.
 		setMyLocationButton()
@@ -86,7 +88,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 		enableMyLocationIfPermitted()
 
 		mMap.setMinZoomPreference(11f)
-		mMap.setMaxZoomPreference(25f)
+		mMap.setMaxZoomPreference(100f)
 
 //		val origin : LatLng = LatLng(startLat,startLong)
 //		val destination : LatLng = LatLng(endLat,endLong)
@@ -150,7 +152,6 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 	}
 
 	private val onMyLocationClickListener = GoogleMap.OnMyLocationClickListener { location ->
-		mMap.setMinZoomPreference(12f)
 		mMap.addMarker(MarkerOptions().position(LatLng(location.latitude,
 				location.longitude)))
 		startLat = location.latitude
@@ -176,11 +177,13 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 	}
 
 	private fun setNavigationDrawer(){
+		drawer_layout = findViewById<DrawerLayout>(R.id.drawer_layout)
+		nav_view = findViewById(R.id.nav_view)
 		val toggle = ActionBarDrawerToggle(
 				this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-		drawer_layout.addDrawerListener(toggle)
+		drawer_layout?.addDrawerListener(toggle)
 		toggle.syncState()
-		nav_view.setNavigationItemSelectedListener(this)
+		nav_view?.setNavigationItemSelectedListener(this)
 	}
 
 	private fun setListener(){
@@ -219,7 +222,8 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 			}
 		}
 
-		search_place.setOnClickListener{
+		search_place = findViewById(R.id.search_place)
+		search_place?.setOnClickListener{
 			try {
 				val inten = PlaceAutocomplete.IntentBuilder(
 						PlaceAutocomplete.MODE_OVERLAY
@@ -249,7 +253,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 			mMap.addMarker(MarkerOptions().position(place.latLng).title(place.name.toString()))
 			mMap.moveCamera(CameraUpdateFactory.newLatLng(place.latLng))
 			mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(place.latLng, 12.0f))
-			search_place.setText(place.name)
+			search_place?.setText(place.name)
 		}
 	}
 
@@ -276,7 +280,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 	}
 
 	override fun onNavigationItemSelected(item: MenuItem): Boolean {
-		drawer_layout.closeDrawer(GravityCompat.START)
+		drawer_layout?.closeDrawer(GravityCompat.START)
 		when (item.itemId) {
 			R.id.home -> {
 				// Handle the camera action

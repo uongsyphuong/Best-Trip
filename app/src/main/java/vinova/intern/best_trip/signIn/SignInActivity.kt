@@ -12,6 +12,9 @@ import androidx.fragment.app.Fragment
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
 import com.facebook.FacebookException
+import com.facebook.FacebookSdk
+import com.facebook.FacebookSdk.getApplicationContext
+import com.facebook.appevents.AppEventsLogger
 import com.facebook.login.LoginResult
 import com.facebook.login.widget.LoginButton
 import vinova.intern.best_trip.R
@@ -78,25 +81,23 @@ class SignInActivity : Fragment(),SignInInterface.View{
 
 	fun setListener(){
 		imgbtn?.setOnClickListener {
-			face?.performClick()
 			face?.fragment = this
 			callBackManager = CallbackManager.Factory.create()
 			face?.setReadPermissions("email")
-			Log.e("ABCD","already here")
+            face?.fragment = this
 			face?.registerCallback(callBackManager,object :FacebookCallback<LoginResult>{
 				override fun onSuccess(result: LoginResult) {
 					mPresenter.handleFacebookAccessToken(result)
 				}
 
 				override fun onCancel() {
-					Log.e("ABCD","cancel")
 				}
 
 				override fun onError(error: FacebookException?) {
-					Log.e("ABCD","error")
 				}
 
 			})
+			face?.performClick()
 		}
 		emailBtn?.setOnClickListener{
 			val user_name = user?.text.toString()

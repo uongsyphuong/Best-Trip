@@ -1,29 +1,36 @@
 package vinova.intern.best_trip.taxiList
 
+import android.view.View
 import com.google.firebase.database.*
+import vinova.intern.best_trip.adapter.DataAdapter
 import vinova.intern.best_trip.model.Taxi
 
-class TaxiListPresenter{
-    fun TaxiListPresenter(){
+class TaxiListPresenter(view: TaxiListInterface.View):TaxiListInterface.Presenter{
 
-    }
+    var mView: TaxiListInterface.View? = view
 
-    fun getData(){
-        val mDatabaseReference: DatabaseReference? = FirebaseDatabase.getInstance().reference
-        var taxi = mDatabaseReference?.child("taxi")
-
-
-        taxi?.addListenerForSingleValueEvent(object:ValueEventListener{
+    override fun getListTaxi(adapter: DataAdapter) {
+        val mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("taxi")
+        mDatabaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val taxi = dataSnapshot.getValue(Taxi::class.java)
-
+                val children = dataSnapshot.children
+                val myList: MutableList<Taxi?> = mutableListOf<Taxi?>()
+                children.forEach {
+                    val data = it.getValue(Taxi::class.java)
+                    if(data!=null)
+                        myList.add(data)
+                }
+                adapter.setData(myList)
             }
-
             override fun onCancelled(p0: DatabaseError) {
                 // Failed to read value
             }
+        })    }
 
-
-        })
+    init {
+        mView?.setPresenter(this)
     }
+
+
+
 }

@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Best Trip</string>
     <!--for login face-->
-    <string name="facebook_app_id">2032403220409437</string>
-    <string name="fb_login_protocol_scheme">cc454fb14420074c4821b9e488071adf</string>
+    <string name="facebook_app_id">232397197374313</string>
+    <string name="fb_login_protocol_scheme">fb232397197374313</string>
 
     <!--sign up and sign in string-->
     <string name="password_login">Password</string>
@@ -56,6 +56,13 @@
     <string name="describe_taxi">Describe Taxi</string>
     <string name="log_in_with_facebook">Log In with FaceBook</string>
     <string name="map">map</string>
+
+    <!--avatar-->
     <string name="from_camera">From camera</string>
     <string name="from_gallery">From Gallery</string>
+
+    <!--search taxi list-->
+    <string name="edt_search">Search..</string>
+    <string name="no_matches">No Matches</string>
+
 </resources>
