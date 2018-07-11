@@ -1,6 +1,7 @@
 package vinova.intern.best_trip.adapter
 
 import android.content.Context
+import android.content.Intent
 import android.view.View
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
@@ -11,6 +12,7 @@ import android.text.method.TextKeyListener.clear
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
+import vinova.intern.best_trip.taxiDetail.TaxiDetailActivity
 import java.util.ArrayList
 
 class DataAdapter: RecyclerView.Adapter<DataAdapter.DataViewHolder> {
@@ -52,14 +54,19 @@ class DataAdapter: RecyclerView.Adapter<DataAdapter.DataViewHolder> {
 
      inner class DataViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-         lateinit var image_taxi: ImageView
-         lateinit var phone_taxi: TextView
-         lateinit var name_taxi: TextView
+
+         var image_taxi: ImageView
+          var phone_taxi: TextView
+          var name_taxi: TextView
 
          init {
              image_taxi = itemView.findViewById(R.id.image_taxi)
              phone_taxi = itemView.findViewById(R.id.phone_taxi)
              name_taxi = itemView.findViewById(R.id.name_taxi)
+             itemView.setOnClickListener {
+                 val intent = Intent (itemView.context,TaxiDetailActivity::class.java )
+                 itemView.context.startActivity(intent)
+             }
          }
      }
 

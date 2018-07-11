@@ -1,5 +1,6 @@
 package vinova.intern.best_trip.log_in_out
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -14,6 +15,7 @@ import kotlinx.android.synthetic.main.app_bar_log_screen.*
 import kotlinx.android.synthetic.main.content_log_screen.*
 import vinova.intern.best_trip.R
 import vinova.intern.best_trip.adapter.PageAdapter
+import vinova.intern.best_trip.taxiList.TaxiListActivity
 
 
 class LogScreenActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {

@@ -73,6 +73,14 @@
             android:name=".map.MapActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:label="@string/title_activity_map"/>
+        <activity
+            android:name=".taxiList.TaxiListActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label="@string/title_activity_map"/>
+        <activity
+            android:name=".taxiDetail.TaxiDetailActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label="@string/title_activity_map"/>
     </application>
 
 </manifest>

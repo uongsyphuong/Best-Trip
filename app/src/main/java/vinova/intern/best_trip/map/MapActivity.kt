@@ -33,6 +33,7 @@ import kotlinx.android.synthetic.main.content_map.*
 import kotlinx.android.synthetic.main.nav_header_log_screen.*
 import vinova.intern.best_trip.R
 import vinova.intern.best_trip.log_in_out.LogScreenActivity
+import vinova.intern.best_trip.taxiList.TaxiListActivity
 
 
 class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNavigationItemSelectedListener,MapInterface.View {
@@ -202,7 +203,6 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 				// Handle the camera action
 			}
 			R.id.taxi -> {
-
 			}
 			R.id.out -> {
 				mapPresenter.signOut()
