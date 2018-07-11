@@ -287,6 +287,8 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 				// Handle the camera action
 			}
 			R.id.taxi -> {
+				val intent =Intent ( this, TaxiListActivity::class.java)
+				startActivity(intent)
 			}
 			R.id.out -> {
 				mapPresenter.signOut()
