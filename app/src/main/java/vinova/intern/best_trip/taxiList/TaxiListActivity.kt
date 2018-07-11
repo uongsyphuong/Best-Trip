@@ -29,6 +29,16 @@ import vinova.intern.best_trip.utils.getData
 
 @Suppress("UNREACHABLE_CODE")
 class TaxiListActivity: AppCompatActivity(), TaxiListInterface.View{
+    override fun getListTaxiSuccess(listTaxi: MutableList<Taxi?>) {
+        adapter.setData(listTaxi)
+    }
+
+    override fun setMatches(boolean: Boolean) {
+        if(boolean) tvNoMatches.visibility = View.VISIBLE
+        else tvNoMatches.visibility = View.GONE
+
+    }
+
     var mPresenter : TaxiListInterface.Presenter = TaxiListPresenter(this)
     lateinit var adapter: DataAdapter
 
@@ -38,7 +48,8 @@ class TaxiListActivity: AppCompatActivity(), TaxiListInterface.View{
     }
 
     override fun showLoading(isShow: Boolean) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        pro_bar_list_taxi.visibility = if (isShow) View.VISIBLE else View.GONE
+
     }
 
     override fun showError(message: String) {
@@ -51,18 +62,19 @@ class TaxiListActivity: AppCompatActivity(), TaxiListInterface.View{
         val mLayoutManager = LinearLayoutManager(this)
         list_taxi.layoutManager = mLayoutManager
         adapter = DataAdapter(this)
+
         list_taxi.adapter = adapter
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        mPresenter.getListTaxi(adapter)
+        mPresenter.getListTaxi()
 
 
-        edt_search_taxi.setOnClickListener({ edt_search_taxi.setCursorVisible(true) })
+        edt_search_taxi.setOnClickListener { edt_search_taxi.setCursorVisible(true) }
 
         edt_search_taxi.setOnTouchListener(View.OnTouchListener { view, motionEvent ->
             if (motionEvent.action == MotionEvent.ACTION_DOWN) {
-                if (edt_search_taxi.getText().isNotEmpty()) {
+                if (edt_search_taxi.text.isNotEmpty()) {
                     if (motionEvent.rawX >= edt_search_taxi.right - edt_search_taxi.compoundDrawables[2].bounds.width()) {
                         edt_search_taxi.setText("")
                         edt_search_taxi.isCursorVisible = true
@@ -76,7 +88,7 @@ class TaxiListActivity: AppCompatActivity(), TaxiListInterface.View{
             false
         })
 
-        edt_search_taxi.setOnEditorActionListener(TextView.OnEditorActionListener { view, actionId, keyEvent ->
+        edt_search_taxi.setOnEditorActionListener(TextView.OnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 edt_search_taxi.isCursorVisible = false
                 if (this.currentFocus != null) {
@@ -94,7 +106,7 @@ class TaxiListActivity: AppCompatActivity(), TaxiListInterface.View{
             }
 
             override fun onTextChanged(charSequence: CharSequence, start: Int, before: Int, count: Int) {
-                if (edt_search_taxi.getText().length > 0) {
+                if (edt_search_taxi.text.isNotEmpty()) {
                     edt_search_taxi.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_search, 0, R.drawable.ic_delete, 0)
                 } else {
                     edt_search_taxi.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_search, 0, 0, 0)
@@ -102,18 +114,11 @@ class TaxiListActivity: AppCompatActivity(), TaxiListInterface.View{
             }
 
             override fun afterTextChanged(editable: Editable) {
- //               mPresenter.updateDataListView(edt_search_taxi.getText().toString())
+                mPresenter.searchData(edt_search_taxi.text.toString(), adapter)
+
             }
         })
 
 
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        return super.onCreateOptionsMenu(menu)
-        val inflater = menuInflater
-        inflater.inflate(R.menu.menu_taxi_list, menu)
-        val searchItem = menu?.findItem(R.id.action_search)
-        val searchView = MenuItemCompat.getActionView(searchItem) as SearchView
     }
 }
