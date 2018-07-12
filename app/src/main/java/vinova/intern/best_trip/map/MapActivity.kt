@@ -39,10 +39,12 @@ import com.google.android.material.navigation.NavigationView
 import vinova.intern.best_trip.R
 import vinova.intern.best_trip.log_in_out.LogScreenActivity
 import vinova.intern.best_trip.model.GetLocation
+import vinova.intern.best_trip.taxiList.TaxiListActivity
 
 
 class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNavigationItemSelectedListener,MapInterface.View
 {
+
 
 
 	private var mapPresenter : MapInterface.Presenter = MapPresenter(this,this)
@@ -339,7 +341,8 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 				// Handle the camera action
 			}
 			R.id.taxi -> {
-
+				val intent =Intent ( this, TaxiListActivity::class.java)
+				startActivity(intent)
 			}
 			R.id.out -> {
 				mapPresenter.signOut()
