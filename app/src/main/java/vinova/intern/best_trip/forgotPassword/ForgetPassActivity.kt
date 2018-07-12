@@ -34,6 +34,7 @@ class ForgetPassActivity: Fragment(),ForgetPassInterface.View{
 
     }
 
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.forgot_password,container,false)
     }

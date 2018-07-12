@@ -1,30 +1,19 @@
 package vinova.intern.best_trip.taxiList
 
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.*
 import android.view.inputmethod.EditorInfo
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.MenuItemCompat
 import android.view.inputmethod.InputMethodManager
-import android.widget.SearchView
 import android.widget.TextView
 import android.widget.Toast
 import vinova.intern.best_trip.R
-import vinova.intern.best_trip.R.id.list_taxi
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.activity_list_taxi.*
 import vinova.intern.best_trip.adapter.DataAdapter
 import vinova.intern.best_trip.model.Taxi
-import vinova.intern.best_trip.utils.getData
 
 
 @Suppress("UNREACHABLE_CODE")
