@@ -18,7 +18,4 @@ interface MapInterface {
 		fun takePhoto(data : Intent, contentResolver: ContentResolver)
 		fun drawRoute(ori : String,desti : String)
 	}
-	interface Model{
-		fun drawRoute(ori : String,desti : String)
-	}
 }
