@@ -8,31 +8,20 @@ import androidx.recyclerview.widget.RecyclerView
 import vinova.intern.best_trip.model.Taxi
 import android.widget.TextView
 import vinova.intern.best_trip.R
-import android.text.method.TextKeyListener.clear
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
+<<<<<<< HEAD
 import vinova.intern.best_trip.taxiDetail.TaxiDetailActivity
 import java.util.ArrayList
+=======
+>>>>>>> fd9e7329a5074bd1cb465b8b3282374e662c760d
 
-class DataAdapter: RecyclerView.Adapter<DataAdapter.DataViewHolder> {
-    var search: String = ""
-    lateinit var arrayList: ArrayList<String>
 
-    lateinit var context:Context
-
-    constructor(context: Context, arrayList:ArrayList<String> ) {
-        this.context = context
-        this.arrayList = arrayList
-        this.search = ""
-     }
-    constructor(context: Context){
-        this.context = context
-    }
+class DataAdapter(var context: Context) : RecyclerView.Adapter<DataAdapter.DataViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataViewHolder {
          return DataViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_taxi, parent, false))
-
      }
 
      override fun getItemCount(): Int {
@@ -76,8 +65,4 @@ class DataAdapter: RecyclerView.Adapter<DataAdapter.DataViewHolder> {
          notifyDataSetChanged()
      }
 
-     fun notifyDataSetChangedWithSearch(search: String) {
-         this.search = search
-         super.notifyDataSetChanged()
-     }
  }
