@@ -1,5 +1,6 @@
 package vinova.intern.best_trip.taxiList
 
+import android.graphics.Movie
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.text.Editable
@@ -25,10 +26,14 @@ import kotlinx.android.synthetic.main.activity_list_taxi.*
 import vinova.intern.best_trip.adapter.DataAdapter
 import vinova.intern.best_trip.model.Taxi
 import vinova.intern.best_trip.utils.getData
+import android.content.Intent
+import vinova.intern.best_trip.taxiDetail.TaxiDetailActivity
 
 
 @Suppress("UNREACHABLE_CODE")
 class TaxiListActivity: AppCompatActivity(), TaxiListInterface.View{
+
+
     override fun getListTaxiSuccess(listTaxi: MutableList<Taxi?>) {
         adapter.setData(listTaxi)
     }

@@ -12,6 +12,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import vinova.intern.best_trip.taxiDetail.TaxiDetailActivity
+import com.google.android.gms.common.internal.DowngradeableSafeParcel.DowngradeableSafeParcelHelper.putParcelable
+import android.os.Bundle
+
+
 
 
 
@@ -34,6 +38,13 @@ class DataAdapter(var context: Context) : RecyclerView.Adapter<DataAdapter.DataV
              holder.name_taxi.text = taxi.name
              holder.phone_taxi.text = taxi.phone
          }
+         holder.itemView.setOnClickListener {
+             val bundle = Bundle()
+             bundle.putParcelable("taxi", taxiList[position])
+             val intent = Intent (holder.itemView.context, TaxiDetailActivity::class.java )
+             intent.putExtras(bundle)
+             holder.itemView.context.startActivity(intent)
+         }
      }
 
      var taxiList: MutableList<Taxi?> = mutableListOf()
@@ -50,8 +61,8 @@ class DataAdapter(var context: Context) : RecyclerView.Adapter<DataAdapter.DataV
              phone_taxi = itemView.findViewById(R.id.phone_taxi)
              name_taxi = itemView.findViewById(R.id.name_taxi)
              itemView.setOnClickListener {
-                 val intent = Intent (itemView.context, TaxiDetailActivity::class.java )
-                 itemView.context.startActivity(intent)
+
+
              }
          }
      }
