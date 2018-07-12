@@ -7,137 +7,137 @@ import com.google.gson.annotations.SerializedName
 data class Bounds (
 		@SerializedName("northeast")
 		@Expose
-		var northeast: Northeast? = null,
+		var northeast: Northeast,
 		@SerializedName("southwest")
 		@Expose
-		var southwest: Southwest? = null
+		var southwest: Southwest
 )
 
 data class Distance (@SerializedName("text")
                      @Expose
-                     var text: String? = null,
+                     var text: String,
                      @SerializedName("value")
 					@Expose
-					var value: Int? = null )
+					var value: Int )
 
 data class Distance_ (	@SerializedName("text")
 	                     @Expose
-	                     var text: String? = null,
+	                     var text: String,
                          @SerializedName("value")
 	                     @Expose
-	                     var value: Int? = null )
+	                     var value: Int )
 
 data class Duration (
 		@SerializedName("text")
 		@Expose
-		var text: String? = null,
+		var text: String,
 		@SerializedName("value")
 		@Expose
-		var value: Int? = null
+		var value: Int
 )
 
 data class Duration_ (
 		@SerializedName("text")
 		@Expose
-		var text: String? = null,
+		var text: String,
 		@SerializedName("value")
 		@Expose
-		var value: Int? = null
+		var value: Int
 )
 
 data class EndLocation (
 		@SerializedName("lat")
        @Expose
-       var lat: Double? = null,
+       var lat: Double,
        @SerializedName("lng")
 		@Expose
-		var lng: Double? = null
+		var lng: Double
 )
 
 data class EndLocation_ (
 		@SerializedName("lat")
 		@Expose
-		var lat: Double? = null,
+		var lat: Double,
 		@SerializedName("lng")
 		@Expose
-		var lng: Double? = null
+		var lng: Double
 )
 
 class GeocodedWaypoint (
 		@SerializedName("geocoder_status")
 		@Expose
-		var geocoderStatus: String? = null,
+		var geocoderStatus: String,
 		@SerializedName("place_id")
 		@Expose
-		var placeId: String? = null,
+		var placeId: String,
 		@SerializedName("types")
 		@Expose
-		var types: List<String>? = null
+		var types: List<String>
 )
 
 data class GetLocation (
 		@SerializedName("geocoded_waypoints")
 		@Expose
-		var geocodedWaypoints: List<GeocodedWaypoint>? = null,
+		var geocodedWaypoints: List<GeocodedWaypoint>,
 		@SerializedName("routes")
 		@Expose
-		var routes: List<Route>? = null,
+		var routes: List<Route>,
 		@SerializedName("status")
 		@Expose
-		var status: String? = null
+		var status: String
 )
 
 class Leg (
 		@SerializedName("distance")
 	@Expose
-	var distance: Distance? = null,
+	var distance: Distance,
 		@SerializedName("duration")
 	@Expose
-	var duration: Duration? = null,
+	var duration: Duration,
 		@SerializedName("end_address")
 	@Expose
-	var endAddress: String? = null,
+	var endAddress: String,
 		@SerializedName("end_location")
 	@Expose
-	var endLocation: EndLocation? = null,
+	var endLocation: EndLocation,
 		@SerializedName("start_address")
 	@Expose
-	var startAddress: String? = null,
+	var startAddress: String,
 		@SerializedName("start_location")
 	@Expose
-	var startLocation: StartLocation? = null,
+	var startLocation: StartLocation,
 		@SerializedName("steps")
 	@Expose
-	var steps: List<Step>? = null,
+	var steps: List<Step>,
 		@SerializedName("traffic_speed_entry")
 	@Expose
-	var trafficSpeedEntry: List<Any>? = null,
+	var trafficSpeedEntry: List<Any>,
 		@SerializedName("via_waypoint")
 	@Expose
-	var viaWaypoint: List<Any>? = null
+	var viaWaypoint: List<Any>
 )
 
 data class Northeast (
 
 	@SerializedName("lat")
 	@Expose
-	var lat: Double? = null,
+	var lat: Double,
 	@SerializedName("lng")
 	@Expose
-	var lng: Double? = null
+	var lng: Double
 )
 
 data class OverviewPolyline (
 	@SerializedName("points")
 	@Expose
-	var points: String? = null
+	var points: String
 )
 
 data class Polyline (
 
 	@SerializedName("points")
 	@Expose
-	var points: String? = null
+	var points: String
 
 )
 
@@ -145,83 +145,83 @@ data class Route (
 
 		@SerializedName("bounds")
 	@Expose
-	var bounds: Bounds? = null,
+	var bounds: Bounds,
 		@SerializedName("copyrights")
 	@Expose
-	var copyrights: String? = null,
+	var copyrights: String,
 		@SerializedName("legs")
 	@Expose
-	var legs: List<Leg>? = null,
+	var legs: List<Leg>,
 		@SerializedName("overview_polyline")
 	@Expose
-	var overviewPolyline: OverviewPolyline? = null,
+	var overviewPolyline: OverviewPolyline,
 		@SerializedName("summary")
 	@Expose
-	var summary: String? = null,
+	var summary: String,
 		@SerializedName("warnings")
 	@Expose
-	var warnings: List<Any>? = null,
+	var warnings: List<Any>,
 		@SerializedName("waypoint_oder")
 	@Expose
-	var waypointOrder: List<Any>? = null
+	var waypointOrder: List<Any>
 )
 
 data class Southwest (
 
 	@SerializedName("lat")
 	@Expose
-	var lat: Double? = null,
+	var lat: Double,
 	@SerializedName("lng")
 	@Expose
-	var lng: Double? = null
+	var lng: Double
 )
 
 data class StartLocation (
 
 	@SerializedName("lat")
 	@Expose
-	var lat: Double? = null,
+	var lat: Double,
 	@SerializedName("lng")
 	@Expose
-	var lng: Double? = null
+	var lng: Double
 )
 
 data class StartLocation_ (
 
 		@SerializedName("lat")
 		@Expose
-		var lat: Double? = null,
+		var lat: Double,
 		@SerializedName("lng")
 		@Expose
-		var lng: Double? = null
+		var lng: Double
 )
 
 data class Step (
 
 		@SerializedName("distance")
 	@Expose
-	var distance: Distance_? = null,
+	var distance: Distance_,
 		@SerializedName("duration")
 	@Expose
-	var duration: Duration_? = null,
+	var duration: Duration_,
 		@SerializedName("end_location")
 	@Expose
-	var endLocation: EndLocation_? = null,
+	var endLocation: EndLocation_,
 		@SerializedName("html_instructions")
 	@Expose
-	var htmlInstructions: String? = null,
+	var htmlInstructions: String,
 		@SerializedName("polyline")
 	@Expose
-	var polyline: Polyline? = null,
+	var polyline: Polyline,
 		@SerializedName("start_location")
 	@Expose
-	var startLocation: StartLocation_? = null,
+	var startLocation: StartLocation_,
 		@SerializedName("travel_mode")
 	@Expose
-	var travelMode: String? = null,
+	var travelMode: String,
 		@SerializedName("maneuver")
 	@Expose
-	var maneuver: String? = null
+	var maneuver: String
 
 )
 

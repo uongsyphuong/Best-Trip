@@ -9,6 +9,11 @@ import android.provider.MediaStore
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import vinova.intern.best_trip.api.CallApi
+import vinova.intern.best_trip.model.GetLocation
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 
@@ -52,17 +57,17 @@ class MapPresenter(view : MapInterface.View, var context: Context):MapInterface.
 	}
 
 	override fun drawRoute(ori: String, desti: String) {
+		CallApi.createService().getDirection(ori,desti,CallApi.Api_key).enqueue(
+				object : Callback<GetLocation>{
+					override fun onFailure(call: Call<GetLocation>?, t: Throwable?) {
 
+					}
+
+					override fun onResponse(call: Call<GetLocation>?, response: Response<GetLocation>?) {
+						mView?.drawRoute(response?.body())
+					}
+				})
 	}
-
-
-
-//	private fun uploadImage(filePath : Uri?) {
-//		if (filePath != null) {
-//			val ref = storageReference?.child("images/" + UUID.randomUUID().toString())
-//			ref?.putFile(filePath)
-//		}
-//	}
 
 	private fun upload(bitmap: Bitmap){
 		val storageReference = storage?.reference

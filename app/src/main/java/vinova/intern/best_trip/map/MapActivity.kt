@@ -1,12 +1,14 @@
 package vinova.intern.best_trip.map
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.location.Location
 import android.os.Bundle
+import android.os.Looper
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -22,19 +24,27 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException
 import com.google.android.gms.common.GooglePlayServicesRepairableException
+import com.google.android.gms.location.*
+import com.google.android.gms.location.LocationServices.getFusedLocationProviderClient
 import com.google.android.gms.location.places.ui.PlaceAutocomplete
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.PolylineOptions
 import com.google.android.material.navigation.NavigationView
 import vinova.intern.best_trip.R
 import vinova.intern.best_trip.log_in_out.LogScreenActivity
+import vinova.intern.best_trip.model.GetLocation
 
 
-class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNavigationItemSelectedListener,MapInterface.View {
+class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNavigationItemSelectedListener,MapInterface.View
+{
+
+
 	private var mapPresenter : MapInterface.Presenter = MapPresenter(this,this)
 
 	private lateinit var mMap: GoogleMap
@@ -49,8 +59,8 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 	var camera : TextView? = null
 	var gallery : TextView? = null
 
-	var startLat:Double = 0.0
-	var startLong : Double = 0.0
+	var startLat:Double? = 0.0
+	var startLong : Double? = 0.0
 	var endLat : Double = 10.8778458
 	var endLong : Double = 106.8072295
 
@@ -58,6 +68,15 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 	var nav_view : NavigationView? = null
 	var search_place : EditText? = null
 	var drawer_layout: DrawerLayout? = null
+
+	private lateinit var mLocationRequest: LocationRequest
+
+	private val UPDATE_INTERVAL = (10 * 1000).toLong()  /* 10 secs */
+	private val FASTEST_INTERVAL: Long = 2000 /* 2 sec */
+
+
+	lateinit var mFusedLocationProviderClient : FusedLocationProviderClient
+
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -70,8 +89,49 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 		animation()
 
 		setListener()
+		startLocationUpdates()
 	}
 
+	@SuppressLint("MissingPermission")
+	private fun startLocationUpdates() {
+
+    // Create the location request to start receiving updates
+    mLocationRequest =  LocationRequest();
+    mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+    mLocationRequest.setInterval(UPDATE_INTERVAL);
+    mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
+
+    // Create LocationSettingsRequest object using location request
+    val builder  =  LocationSettingsRequest.Builder()
+    builder.addLocationRequest(mLocationRequest)
+    val locationSettingsRequest  = builder.build()
+
+    // Check whether location settings are satisfied
+    // https://developers.google.com/android/reference/com/google/android/gms/location/SettingsClient
+    val settingsClient = LocationServices.getSettingsClient(this)
+    settingsClient.checkLocationSettings(locationSettingsRequest);
+
+    // new Google API SDK v11 uses getFusedLocationProviderClient(this)
+    getFusedLocationProviderClient(this).requestLocationUpdates(mLocationRequest,object : LocationCallback() {
+	    override fun onLocationResult(p0: LocationResult) {
+		    onLocationChanged(p0.lastLocation)
+	    }
+    }, Looper.myLooper())
+}
+	var first_time = true
+	 fun onLocationChanged(location : Location) {
+		 startLat = location.latitude
+		 startLong = location.longitude
+
+		 val latLng = LatLng(location.latitude, location.longitude)
+		 mMap.addCircle(CircleOptions().center(latLng))
+		 if (first_time){
+			 mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng))
+			 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12.0f))
+			 first_time = false
+		 }
+
+	}
 	/**
 	 * Manipulates the map once available.
 	 * This callback is triggered when the map is ready to be used.
@@ -83,26 +143,30 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 	 */
 	override fun onMapReady(googleMap: GoogleMap) {
 		mMap = googleMap
-		mMap.setOnMyLocationButtonClickListener(onMyLocationButtonClickListener)
-		mMap.setOnMyLocationClickListener(onMyLocationClickListener)
 		enableMyLocationIfPermitted()
+
+		mMap.setOnMyLocationButtonClickListener(object : GoogleMap.OnMyLocationClickListener, GoogleMap.OnMyLocationButtonClickListener {
+			override fun onMyLocationClick(p0: Location) {
+				startLat = p0.latitude
+				startLong = p0.longitude
+				mMap.addMarker(MarkerOptions().position(LatLng(p0.latitude,
+						p0.longitude)))
+			}
+
+			override fun onMyLocationButtonClick(): Boolean {
+				mMap.setMinZoomPreference(15f)
+				return false
+			}
+		})
+		mMap.setOnMyLocationClickListener { p0 ->
+			startLat = p0.latitude
+			startLong = p0.longitude
+			mMap.addMarker(MarkerOptions().position(LatLng(p0.latitude,
+					p0.longitude)))
+		}
 
 		mMap.setMinZoomPreference(11f)
 		mMap.setMaxZoomPreference(100f)
-
-//		val origin : LatLng = LatLng(startLat,startLong)
-//		val destination : LatLng = LatLng(endLat,endLong)
-//		DrawRouteMaps.getInstance(this)
-//				.draw(origin,destination,mMap)
-//		DrawMarker.getInstance(this).draw(mMap,destination,R.drawable.ic_placeholder,"Destination")
-//		val bounds = LatLngBounds.builder()
-//				.include(origin)
-//				.include(destination)
-//				.build()
-//		val displays = Point()
-//		windowManager.defaultDisplay.getSize(displays)
-//		mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds,displays.x,250,30))
-
 	}
 
 	private fun enableMyLocationIfPermitted() {
@@ -146,19 +210,6 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 		}
 	}
 
-	private val onMyLocationButtonClickListener = GoogleMap.OnMyLocationButtonClickListener {
-		mMap.setMinZoomPreference(15f)
-		false
-	}
-
-	private val onMyLocationClickListener = GoogleMap.OnMyLocationClickListener { location ->
-		mMap.addMarker(MarkerOptions().position(LatLng(location.latitude,
-				location.longitude)))
-		startLat = location.latitude
-		startLong = location.longitude
-		calculateDis(endLat,endLong)
-	}
-
 	private fun animation(){
 		slideUp = AnimationUtils.loadAnimation(this,R.anim.slide_up)
 		slideDown = AnimationUtils.loadAnimation(this,R.anim.slide_down)
@@ -189,6 +240,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 	private fun setListener(){
 		gallery = findViewById<NavigationView>(R.id.nav_view).getHeaderView(0).findViewById<TextView>(R.id.gallery)
 		camera = findViewById<NavigationView>(R.id.nav_view).getHeaderView(0).findViewById<TextView>(R.id.camera)
+
 		findViewById<NavigationView>(R.id.nav_view).getHeaderView(0).findViewById<ImageView>(R.id.image_profile).
 				setOnClickListener {
 					if (show){
@@ -223,6 +275,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 		}
 
 		search_place = findViewById(R.id.search_place)
+
 		search_place?.setOnClickListener{
 			try {
 				val inten = PlaceAutocomplete.IntentBuilder(
@@ -313,15 +366,55 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 
 	}
 
-	override fun showDestination(lat: Double, long: Double) {
-
+	override fun drawRoute(getLocation: GetLocation?) {
+		var points : ArrayList<LatLng> = ArrayList()
+		var polyline : PolylineOptions = PolylineOptions()
+		if (getLocation!= null )
+			if( getLocation.routes.isNotEmpty()){
+				for (step in getLocation.routes[0].legs[0].steps){
+					points.addAll(decodePoly(step.polyline.points))
+				}
+				for (point in points)
+					polyline.add(point)
+			}
+		mMap.addPolyline(polyline.width(10f).color(R.color.colorAqua))
 	}
 
-	private fun calculateDis(lat: Double, long: Double): Float {
-		var result = FloatArray(10)
-		Location.distanceBetween(startLat,startLong,lat,long,result)
-		Toast.makeText(this,"Distance ${result[0]}",Toast.LENGTH_LONG).show()
-		return result[0]
+	private fun decodePoly(encoded: String): List<LatLng> {
+		val poly = ArrayList<LatLng>()
+		var index = 0
+		val len = encoded.length
+		var lat = 0
+		var lng = 0
+
+		while (index < len) {
+			var b: Int
+			var shift = 0
+			var result = 0
+			do {
+				b = encoded[index++].toInt() - 63
+				result = result or (b and 0x1f shl shift)
+				shift += 5
+			} while (b >= 0x20)
+			val dlat = if (result and 1 != 0) (result shr 1).inv() else result shr 1
+			lat += dlat
+
+			shift = 0
+			result = 0
+			do {
+				b = encoded[index++].toInt() - 63
+				result = result or (b and 0x1f shl shift)
+				shift += 5
+			} while (b >= 0x20)
+			val dlng = if (result and 1 != 0) (result shr 1).inv() else result shr 1
+			lng += dlng
+
+			val p = LatLng(lat.toDouble() / 1E5,
+					lng.toDouble() / 1E5)
+			poly.add(p)
+		}
+
+		return poly
 	}
 
 }

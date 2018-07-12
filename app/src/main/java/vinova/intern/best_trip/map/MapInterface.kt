@@ -4,12 +4,13 @@ import android.content.ContentResolver
 import android.content.Intent
 import android.graphics.Bitmap
 import vinova.intern.best_trip.baseInterface.BaseView
+import vinova.intern.best_trip.model.GetLocation
 
 interface MapInterface {
 	interface View : BaseView<Presenter>{
 		fun goToLogScreen()
-		fun showDestination(lat:Double,long:Double)
 		fun setImg(bitmap: Bitmap)
+		fun drawRoute(getLocation : GetLocation?)
 	}
 	interface Presenter{
 		fun signOut()
