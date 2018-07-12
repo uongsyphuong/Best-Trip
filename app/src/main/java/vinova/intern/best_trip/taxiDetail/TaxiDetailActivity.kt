@@ -9,15 +9,36 @@ import android.os.Bundle
 import android.os.PersistableBundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import com.bumptech.glide.Glide
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_detail_taxi.*
 import vinova.intern.best_trip.R
+import vinova.intern.best_trip.model.Taxi
+import java.lang.reflect.Array.get
+import java.text.DecimalFormat
 
 class TaxiDetailActivity: AppCompatActivity(){
+    lateinit var taxi:Taxi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail_taxi)
+
+        val bundle = intent.extras
+        taxi = bundle.getParcelable("taxi")
+
+
+        val formatter = DecimalFormat("#,###")
+
+        fee_open_door.text = formatter.format(taxi.fourSeaters?.get("open_door"))
+        fee_first.text = formatter.format(taxi.fourSeaters?.get("first"))
+        fee_over.text = formatter.format(taxi.fourSeaters?.get("after"))
+
+        Glide.with(this)
+                .load(taxi.logo)
+                .into(image_taxi)
+        about_taxi.text = taxi.about
+
         fab.setOnClickListener {
 
             if (ActivityCompat.checkSelfPermission(this,
