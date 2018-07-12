@@ -41,4 +41,5 @@ class TaxiDetailActivity: AppCompatActivity(){
         if(requestCode == 1 )
             startCall()
     }
+
 }

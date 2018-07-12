@@ -11,11 +11,8 @@ import vinova.intern.best_trip.R
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
-<<<<<<< HEAD
 import vinova.intern.best_trip.taxiDetail.TaxiDetailActivity
-import java.util.ArrayList
-=======
->>>>>>> fd9e7329a5074bd1cb465b8b3282374e662c760d
+
 
 
 class DataAdapter(var context: Context) : RecyclerView.Adapter<DataAdapter.DataViewHolder>() {
@@ -53,7 +50,7 @@ class DataAdapter(var context: Context) : RecyclerView.Adapter<DataAdapter.DataV
              phone_taxi = itemView.findViewById(R.id.phone_taxi)
              name_taxi = itemView.findViewById(R.id.name_taxi)
              itemView.setOnClickListener {
-                 val intent = Intent (itemView.context,TaxiDetailActivity::class.java )
+                 val intent = Intent (itemView.context, TaxiDetailActivity::class.java )
                  itemView.context.startActivity(intent)
              }
          }
