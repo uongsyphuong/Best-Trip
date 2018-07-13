@@ -6,7 +6,11 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.provider.MediaStore
+import android.util.Log
+import com.google.android.gms.tasks.Continuation
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.OnSuccessListener
+import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
@@ -21,6 +25,8 @@ import vinova.intern.best_trip.model.GetLocation
 import vinova.intern.best_trip.model.Taxi
 import java.io.ByteArrayOutputStream
 import java.io.IOException
+
+
 
 
 class MapPresenter(view : MapInterface.View, var context: Context):MapInterface.Presenter {
@@ -79,14 +85,26 @@ class MapPresenter(view : MapInterface.View, var context: Context):MapInterface.
 		val profileRef = storageReference?.child("images/profile_${userRef?.uid}.png")
 
 		val byteArrayOutputStream = ByteArrayOutputStream()
-		bitmap.compress(Bitmap.CompressFormat.JPEG,1,byteArrayOutputStream)
+		bitmap.compress(Bitmap.CompressFormat.PNG,100,byteArrayOutputStream)
+		Log.e("abcd", profileRef.toString())
 		profileRef?.putBytes(byteArrayOutputStream.toByteArray())?.addOnSuccessListener {
-			OnSuccessListener<UploadTask.TaskSnapshot> { taskSnapshot ->
+			// success
+			profileRef.downloadUrl.addOnCompleteListener { taskSnapshot ->
+				val url = taskSnapshot.result.toString()
 				val userReference: DatabaseReference = FirebaseDatabase.getInstance().reference.child("user")
-				val text = taskSnapshot.metadata?.path
-				userReference.child(userRef?.uid.toString()).child("image").setValue(taskSnapshot?.metadata?.path.toString())
+				userReference.child(userRef?.uid.toString()).child("image").setValue(url)
 			}
 		}
+
+
+
+//			OnSuccessListener<UploadTask.TaskSnapshot> {
+//				it.metadata.
+//                val userReference: DatabaseReference = FirebaseDatabase.getInstance().reference.child("user")
+//				val text = it.uploadSessionUri?.path
+//				Log.e("abcd1", text)
+//
+//				userReference.child(userRef?.uid.toString()).child("image").setValue(it?.metadata?.path)
 
 
 	}
