@@ -240,7 +240,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 		val rlp = locationButton.layoutParams as RelativeLayout.LayoutParams
 		rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0)
 		rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE)
-		rlp.setMargins(0, 0, 30, 200)
+		rlp.setMargins(0, 0, 30, 30)
 	}
 
 	private fun setNavigationDrawer(){

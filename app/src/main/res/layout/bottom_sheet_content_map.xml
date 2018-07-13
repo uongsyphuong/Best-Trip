@@ -1,111 +1,125 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bottom_sheet_layout"
+    style="@style/Theme.AppCompat.Light.NoActionBar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/bottom_sheet_layout"
+    android:paddingBottom="24dp"
     app:behavior_hideable="true"
     app:behavior_peekHeight="56dp"
-    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
-    style="@style/Theme.AppCompat.Light.NoActionBar">
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_result"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        app:title="@string/title_activity_map"
-        android:background="@color/colorPrimary"/>
-
-    <TextView
-        android:id="@+id/four_seat"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:padding="8dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/_4_seaters"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_result"/>
-
-    <Button
-        android:id="@+id/viewAllFourSeat"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:background="@android:color/transparent"
-        android:drawableEnd="@drawable/ic_forward"
-        android:text="@string/view_all"
-        app:layout_constraintBottom_toBottomOf="@+id/four_seat"
+        android:layout_marginEnd="72dp"
+        android:background="@color/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/four_seat" />
+        app:title="@string/title_activity_map" />
 
-    <include
-        layout="@layout/taxi_result_item"
-        android:layout_width="0dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:id="@+id/itemOne"
-        app:layout_constraintEnd_toEndOf="@+id/viewAllFourSeat"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/four_seat" />
-
-    <include
-        android:id="@+id/itemTwo"
-        layout="@layout/taxi_result_item"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toEndOf="@+id/itemOne"
-        app:layout_constraintStart_toStartOf="@+id/itemOne"
-        app:layout_constraintTop_toBottomOf="@+id/itemOne" />
-
-    <TextView
-        android:id="@+id/sevenSeat"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
-        android:padding="8dp"
-        android:text="@string/_7_seat"
-        app:layout_constraintBottom_toBottomOf="@+id/viewAllSevenSeat"
-        app:layout_constraintTop_toBottomOf="@+id/itemTwo" />
+        android:background="@color/colorWhite"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_result"
+        app:layout_constraintVertical_bias="0.0">
 
-    <Button
-        android:id="@+id/viewAllSevenSeat"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:drawableEnd="@drawable/ic_forward"
-        android:text="@string/view_all"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/itemTwo"
-        android:background="@android:color/transparent" />
+        <TextView
+            android:id="@+id/four_seat"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:padding="8dp"
+            android:text="@string/_4_seaters"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <include
-        android:id="@+id/item7One"
-        layout="@layout/taxi_result_item"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sevenSeat" />
+        <Button
+            android:id="@+id/viewAllFourSeat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:background="@android:color/transparent"
+            android:drawableEnd="@drawable/ic_forward"
+            android:text="@string/view_all"
+            app:layout_constraintBottom_toBottomOf="@+id/four_seat"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/four_seat" />
 
-    <include
-        android:id="@+id/item7Two"
-        layout="@layout/taxi_result_item"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toEndOf="@+id/item7One"
-        app:layout_constraintStart_toStartOf="@+id/item7One"
-        app:layout_constraintTop_toBottomOf="@+id/item7One"
-        android:layout_marginBottom="8dp"/>
+        <include
+            android:id="@+id/itemOne"
+            layout="@layout/taxi_result_item"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="@+id/viewAllFourSeat"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/four_seat" />
+
+        <include
+            android:id="@+id/itemTwo"
+            layout="@layout/taxi_result_item"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="@+id/itemOne"
+            app:layout_constraintStart_toStartOf="@+id/itemOne"
+            app:layout_constraintTop_toBottomOf="@+id/itemOne" />
+
+        <TextView
+            android:id="@+id/sevenSeat"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:padding="8dp"
+            android:text="@string/_7_seat"
+            app:layout_constraintBottom_toBottomOf="@+id/viewAllSevenSeat"
+            app:layout_constraintTop_toBottomOf="@+id/itemTwo" />
+
+        <Button
+            android:id="@+id/viewAllSevenSeat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="@android:color/transparent"
+            android:drawableEnd="@drawable/ic_forward"
+            android:text="@string/view_all"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/itemTwo" />
+
+        <include
+            android:id="@+id/item7One"
+            layout="@layout/taxi_result_item"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sevenSeat" />
+
+        <include
+            android:id="@+id/item7Two"
+            layout="@layout/taxi_result_item"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintEnd_toEndOf="@+id/item7One"
+            app:layout_constraintStart_toStartOf="@+id/item7One"
+            app:layout_constraintTop_toBottomOf="@+id/item7One" />
 
 
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
