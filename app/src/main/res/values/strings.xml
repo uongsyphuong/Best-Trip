@@ -66,4 +66,11 @@
     <string name="no_matches">No Matches</string>
     <string name="fee_openDoor">11.000</string>
 
+    <!--taxi detail-->
+    <string name="_4_seaters">4 seat</string>
+    <string name="view_all">View all</string>
+    <string name="currency">VND</string>
+    <string name="price_taxi">price 156846</string>
+    <string name="_7_seat">7 seats</string>
+
 </resources>

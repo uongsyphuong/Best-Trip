@@ -18,6 +18,8 @@ import android.widget.*
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
@@ -35,6 +37,7 @@ import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PolylineOptions
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.navigation.NavigationView
 import vinova.intern.best_trip.R
 import vinova.intern.best_trip.log_in_out.LogScreenActivity
@@ -76,9 +79,8 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 	private val UPDATE_INTERVAL = (10 * 1000).toLong()  /* 10 secs */
 	private val FASTEST_INTERVAL: Long = 2000 /* 2 sec */
 
-
-	lateinit var mFusedLocationProviderClient : FusedLocationProviderClient
-
+	lateinit var sheetBehavior : BottomSheetBehavior<ConstraintLayout>
+	var constraintLayout : ConstraintLayout? = null
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -92,6 +94,18 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 
 		setListener()
 		startLocationUpdates()
+		val  outer : CoordinatorLayout = findViewById(R.id.app_bar_layout)
+		constraintLayout = outer.findViewById(R.id.bottom_sheet_layout)
+		sheetBehavior = BottomSheetBehavior.from(constraintLayout)
+		sheetBehavior.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback(){
+			override fun onSlide(p0: View, p1: Float) {
+
+			}
+
+			override fun onStateChanged(p0: View, p1: Int) {
+
+			}
+		})
 	}
 
 	@SuppressLint("MissingPermission")
@@ -226,7 +240,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 		val rlp = locationButton.layoutParams as RelativeLayout.LayoutParams
 		rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0)
 		rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE)
-		rlp.setMargins(0, 0, 30, 30)
+		rlp.setMargins(0, 0, 30, 200)
 	}
 
 	private fun setNavigationDrawer(){
@@ -329,7 +343,16 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 
 	override fun onOptionsItemSelected(item: MenuItem?): Boolean {
 		when(item?.itemId){
-			R.id.toMap -> { }
+			R.id.toMap -> {
+				if (sheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
+
+					sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED)
+				} else {
+
+					sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED)
+
+				}
+			}
 		}
 		return super.onOptionsItemSelected(item)
 	}
@@ -379,6 +402,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 				}
 				for (point in points)
 					polyline.add(point)
+				getLocation.routes[0].legs[0].distance.text
 			}
 		mMap.addPolyline(polyline.width(10f).color(R.color.colorAqua))
 	}
