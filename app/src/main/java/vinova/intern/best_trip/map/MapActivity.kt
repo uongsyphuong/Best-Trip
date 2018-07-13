@@ -18,6 +18,7 @@ import android.widget.*
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.ActivityCompat
@@ -39,13 +40,51 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PolylineOptions
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.navigation.NavigationView
+import kotlinx.android.synthetic.main.app_bar_map.*
 import vinova.intern.best_trip.R
 import vinova.intern.best_trip.log_in_out.LogScreenActivity
 import vinova.intern.best_trip.model.GetLocation
+import vinova.intern.best_trip.model.Taxi
 import vinova.intern.best_trip.taxiList.TaxiListActivity
+import java.text.DecimalFormat
 
 
 class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNavigationItemSelectedListener,MapInterface.View {
+
+
+	private lateinit var listTaxiFour4:MutableList<Taxi?>
+	private lateinit var listTaxiSeven7:MutableList<Taxi?>
+	override fun getListTaxiAndPriceSuccess(listTaxiFour: MutableList<Taxi?>, listTaxiSeven: MutableList<Taxi?>) {
+		listTaxiFour4 = listTaxiFour
+		listTaxiSeven7 = listTaxiSeven
+		var cardView : CardView = findViewById(R.id.itemOne)
+		setResult(cardView,listTaxiFour[0],true)
+
+		cardView = findViewById(R.id.itemTwo)
+		setResult(cardView,listTaxiFour[1],true)
+
+		cardView = findViewById(R.id.item7One)
+		setResult(cardView,listTaxiSeven[0],false)
+
+		cardView = findViewById(R.id.item7Two)
+		setResult(cardView,listTaxiSeven[1],false)
+		bottom_sheet_layout.visibility = View.VISIBLE
+
+	}
+
+	private fun setResult(cardView: CardView,taxi: Taxi?,is4 : Boolean){
+		val name : TextView = cardView.findViewById(R.id.name_taxi)
+		val phone : TextView = cardView.findViewById(R.id.phone_taxi)
+		val price : TextView = cardView.findViewById(R.id.price)
+		val formatter = DecimalFormat("#,###")
+
+		if (taxi!= null){
+			name.text = taxi.name
+			phone.text = taxi.phone
+			price.text = formatter.format( if (is4) taxi.priceFour else taxi.priceSeven)
+		}
+	}
+
 	private var mapPresenter : MapInterface.Presenter = MapPresenter(this,this)
 
 	private lateinit var mMap: GoogleMap
@@ -62,8 +101,6 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 
 	var startLat:Double? = 0.0
 	var startLong : Double? = 0.0
-	var endLat : Double = 10.8778458
-	var endLong : Double = 106.8072295
 
 	var toolbar : Toolbar? = null
 	var nav_view : NavigationView? = null
@@ -400,8 +437,10 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 				}
 				for (point in points)
 					polyline.add(point)
+				mapPresenter.calcPrice(getLocation.routes[0].legs[0].distance.value.toFloat())
 			}
 		mMap.addPolyline(polyline.width(10f).color(R.color.colorAqua))
+
 	}
 
 	private fun decodePoly(encoded: String): List<LatLng> {

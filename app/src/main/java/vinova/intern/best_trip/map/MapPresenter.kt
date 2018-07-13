@@ -25,8 +25,7 @@ import vinova.intern.best_trip.model.GetLocation
 import vinova.intern.best_trip.model.Taxi
 import java.io.ByteArrayOutputStream
 import java.io.IOException
-
-
+import java.text.DecimalFormat
 
 
 class MapPresenter(view : MapInterface.View, var context: Context):MapInterface.Presenter {
@@ -109,10 +108,14 @@ class MapPresenter(view : MapInterface.View, var context: Context):MapInterface.
 
 	}
 
-	fun calcPrice(distance: Float) {
-		val distanceKm  = distance/1000
+	override fun calcPrice(distance: Float) {
+
+        val distanceKm  = (Math.round((distance/1000)*10.0)/10.0).toFloat()
 		val mDatabaseReference = FirebaseDatabase.getInstance().reference.child("taxi")
-		val listTaxi: MutableList<Taxi?> = mutableListOf()
+		var listTaxi: MutableList<Taxi?> = mutableListOf()
+		var listTaxiFour: MutableList<Taxi?> = mutableListOf()
+		var listTaxiSeven: MutableList<Taxi?> = mutableListOf()
+
 		mDatabaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
 			override fun onDataChange(dataSnapshot: DataSnapshot) {
 				val children = dataSnapshot.children
@@ -120,13 +123,21 @@ class MapPresenter(view : MapInterface.View, var context: Context):MapInterface.
 				children.forEach {
 					val data = it.getValue(Taxi::class.java)
 					data?.distance = distanceKm
-					data?.price = price(distanceKm, data?.fourSeaters, data?.sevenSeaters)
+                    val priceFour = priceFour(distanceKm, data?.fourSeaters)?.let { it1 -> Math.round(it1) }
+                    val priceSeven = priceSeven(distanceKm, data?.sevenSeaters)?.let { it1 -> Math.round(it1) }
+
+                    data?.priceFour = priceFour
+					data?.priceSeven = priceSeven
 					if (data != null) {
 						listTaxi.add(data)
 					}
 				}
+				listTaxi.sortBy{it?.priceFour}
+				listTaxiFour = listTaxi
+				listTaxi.sortBy { it?.priceSeven }
+				listTaxiSeven = listTaxi
 
-				//mView?.getListTaxiSuccess(listTaxi)
+				mView?.getListTaxiAndPriceSuccess(listTaxiFour,listTaxiSeven)
 			}
 
 			override fun onCancelled(p0: DatabaseError) {
@@ -135,34 +146,39 @@ class MapPresenter(view : MapInterface.View, var context: Context):MapInterface.
 		})
 	}
 
-	private fun price(distanceKm: Float, fourSeater:HashMap<String,Float>?, sevenSeater:HashMap<String,Float>?): HashMap<String, Float>? {
-		if (distanceKm < 30 && distanceKm < 1) {
-			if (fourSeater != null && sevenSeater != null) {
-				val feeFour = fourSeater["first"]
-				val feeSeven = sevenSeater["first"]
-				if (feeFour != null && feeSeven != null) {
-					return hashMapOf("fourSeater" to distanceKm * feeFour, "sevenSeater" to distanceKm * feeSeven)
-				}
+	private fun priceFour(distanceKm: Float, fourSeaters: HashMap<String, Float>?): Float? {
+
+		if (distanceKm < 30 && distanceKm > 1) {
+
+			val feeFour = fourSeaters?.get("first")
+			if (feeFour != null) {
+				return  distanceKm * feeFour
 			}
 		}
 		if (distanceKm > 30) {
-			if (fourSeater != null && sevenSeater != null) {
-				val feeFiFour = fourSeater["first"]
-				val feeFiSeven = sevenSeater["first"]
-				val feeAfFour = fourSeater["after"]
-				val feeAfSeven = sevenSeater["after"]
-				if (feeFiFour != null && feeFiSeven != null && feeAfFour != null && feeAfSeven != null) {
-					return hashMapOf("fourSeater" to (30 * feeFiFour + (distanceKm - 30) * feeAfFour),
-							"sevenSeater" to (30 * feeFiSeven + (distanceKm - 30) * feeAfSeven))
-				}
+			val feeFiFour = fourSeaters?.get("first")
+			val feeAfFour = fourSeaters?.get("after")
+			if (feeFiFour != null && feeAfFour != null) {
+				return 30 * feeFiFour + (distanceKm - 30) * feeAfFour
 			}
 		}
-		val feeFou = fourSeater?.get("open_door")
-		val feeSev = sevenSeater?.get("open_door")
-		return if (feeFou != null && feeSev != null) {
-			hashMapOf("fourSeater" to feeFou,
-					"sevenSeater" to feeSev)
-		} else null
+		return fourSeaters?.get("open_door")
+	}
 
+	private fun priceSeven(distanceKm: Float, sevenSeater: HashMap<String, Float>?): Float? {
+		if (distanceKm < 30 && distanceKm > 1) {
+			val feeFour = sevenSeater?.get("first")
+			if (feeFour != null) {
+				return distanceKm * feeFour
+			}
+		}
+		if (distanceKm > 30) {
+			val feeFiFour = sevenSeater?.get("first")
+			val feeAfFour = sevenSeater?.get("after")
+			if (feeFiFour != null && feeAfFour != null) {
+				return (30 * feeFiFour + (distanceKm - 30) * feeAfFour)
+			}
+		}
+		return sevenSeater?.get("open_door")
 	}
 }
