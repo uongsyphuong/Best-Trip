@@ -11,8 +11,13 @@ import kotlinx.android.synthetic.main.activity_logo.*
 import vinova.intern.best_trip.R
 import vinova.intern.best_trip.log_in_out.LogScreenActivity
 import vinova.intern.best_trip.map.MapActivity
+import vinova.intern.best_trip.model.User
 
 class LogoActivity : AppCompatActivity(),LogoInterface.View {
+    override fun getUserSuccess(user: User?) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
     var mPresenter : LogoInterface.Presenter = LogoPresenter(this)
 
     override fun setPresenter(presenter: LogoInterface.Presenter) {
