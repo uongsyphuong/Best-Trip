@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="vinova.intern.best_trip.signUp.SignUpActivity">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -54,8 +55,8 @@
             android:layout_marginEnd="8dp"
             android:drawableStart="@drawable/ic_lock"
             android:drawablePadding="8dp"
-            android:inputType="textPassword"
             android:hint="@string/password_login"
+            android:inputType="textPassword"
             app:layout_constraintEnd_toEndOf="@+id/username"
             app:layout_constraintStart_toStartOf="@+id/username"
             app:layout_constraintTop_toBottomOf="@+id/email"
@@ -68,27 +69,28 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="12dp"
             android:layout_marginEnd="8dp"
+            android:background="@android:color/transparent"
             android:text="@string/sign_up_with_email"
             android:textSize="20sp"
-            android:background="@android:color/transparent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/password" />
 
         <ProgressBar
+            android:id="@+id/progress_bar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:id="@+id/progress_bar"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.462"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.26999998" />
+            app:layout_constraintVertical_bias="0.288" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

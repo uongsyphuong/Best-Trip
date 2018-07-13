@@ -18,14 +18,17 @@ class SignInPresenter(view: SignInInterface.View) :SignInInterface.Presenter{
     }
 
     override fun loginUser(email:String?, pass:String?) {
+        mView?.showLoading(true)
         if (email!=null && pass!=null)
             FirebaseAuth.getInstance()
                     .signInWithEmailAndPassword(email,pass)
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
+
                             mView!!.signInSuccess()
                         }
                         else {
+                            mView?.showLoading(false)
                             mView!!.showError("Authentication failed")
                         }
                     }

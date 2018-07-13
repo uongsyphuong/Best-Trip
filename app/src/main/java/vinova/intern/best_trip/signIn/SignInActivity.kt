@@ -33,6 +33,7 @@ class SignInActivity : Fragment(),SignInInterface.View{
 	var forgetLayout : FrameLayout? = null
 	var face : LoginButton?=null
 	var callBackManager : CallbackManager? = null
+	var loader: ProgressBar? = null
 
 	override fun signInSuccess() {
 		goToMapActivity()
@@ -44,6 +45,12 @@ class SignInActivity : Fragment(),SignInInterface.View{
 	}
 
 	override fun showLoading(isShow: Boolean) {
+		if (isShow){
+			loader?.visibility = View.VISIBLE
+		}
+		else{
+			loader?.visibility = View.GONE
+		}
 
 	}
 
@@ -65,6 +72,7 @@ class SignInActivity : Fragment(),SignInInterface.View{
 		pass = view.findViewById(R.id.password)
 		forgetBtn = view.findViewById(R.id.forgot_password)
 		face = view.findViewById(R.id.faceLogin)
+		loader = view.findViewById(R.id.loader)
 		fragmentManager?.beginTransaction()?.replace(R.id.forget_frag,ForgetPassActivity())?.addToBackStack(null)?.commit()
 		setListener()
 	}
