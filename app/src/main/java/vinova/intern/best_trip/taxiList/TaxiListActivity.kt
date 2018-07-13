@@ -15,12 +15,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_list_taxi.*
 import vinova.intern.best_trip.adapter.DataAdapter
 import vinova.intern.best_trip.model.Taxi
-<<<<<<< HEAD
-=======
 import vinova.intern.best_trip.utils.getData
 import android.content.Intent
 import vinova.intern.best_trip.taxiDetail.TaxiDetailActivity
->>>>>>> c184d14668f7abc9036ba86b8862920912a96439
+
 
 
 @Suppress("UNREACHABLE_CODE")
