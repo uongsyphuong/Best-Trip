@@ -37,6 +37,8 @@ class Taxi :Parcelable {
         parcel.writeString(phone)
         parcel.writeString(logo)
         parcel.writeString(about)
+        parcel.writeSerializable(fourSeaters)
+        parcel.writeSerializable(sevenSeaters)
         parcel.writeValue(distance)
         parcel.writeValue(priceFour)
         parcel.writeValue(priceSeven)

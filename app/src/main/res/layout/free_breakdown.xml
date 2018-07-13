@@ -54,7 +54,7 @@
             tools:ignore="MissingConstraints" />
 
         <TextView
-            android:id="@+id/fee_open_door"
+            android:id="@+id/fee_open_door7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -78,7 +78,7 @@
             tools:ignore="MissingConstraints" />
 
         <TextView
-            android:id="@+id/fee_first"
+            android:id="@+id/fee_first7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -87,10 +87,10 @@
             app:layout_constraintEnd_toStartOf="@+id/first"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/fee_open_door" />
+            app:layout_constraintTop_toBottomOf="@+id/fee_open_door7" />
 
         <TextView
-            android:id="@+id/fee_over"
+            android:id="@+id/fee_over7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -100,7 +100,7 @@
             app:layout_constraintEnd_toStartOf="@+id/textView3"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/fee_first" />
+            app:layout_constraintTop_toBottomOf="@+id/fee_first7" />
 
         <TextView
             android:id="@+id/first"

@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_detail_taxi.*
+import kotlinx.android.synthetic.main.free_breakdown.*
 import vinova.intern.best_trip.R
 import vinova.intern.best_trip.model.Taxi
 import java.lang.reflect.Array.get
@@ -33,6 +34,10 @@ class TaxiDetailActivity: AppCompatActivity(){
         fee_open_door.text = formatter.format(taxi.fourSeaters?.get("open_door"))
         fee_first.text = formatter.format(taxi.fourSeaters?.get("first"))
         fee_over.text = formatter.format(taxi.fourSeaters?.get("after"))
+
+        fee_open_door7.text = formatter.format(taxi.sevenSeaters?.get("open_door"))
+        fee_first7.text = formatter.format(taxi.sevenSeaters?.get("first"))
+        fee_over7.text = formatter.format(taxi.sevenSeaters?.get("after"))
 
         Glide.with(this)
                 .load(taxi.logo)
