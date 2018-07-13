@@ -9,10 +9,11 @@ interface TaxiListInterface {
     interface View: BaseView<Presenter> {
         fun setMatches(boolean: Boolean)
         fun getListTaxiSuccess(listTaxi: MutableList<Taxi?>)
-
+        fun goToLogScreen()
     }
     interface Presenter: BasePresenter {
         fun getListTaxi()
         fun searchData(search:String, adapter: DataAdapter)
+        fun signOut()
     }
 }

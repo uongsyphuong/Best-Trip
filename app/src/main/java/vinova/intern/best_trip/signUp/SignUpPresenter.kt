@@ -15,6 +15,10 @@ class SignUpPresenter(view: SignUpInterface.View) :SignUpInterface.Presenter {
     }
 
     override fun createNewAccount(username:String,email: String, pass: String) {
+        if (username == ""|| email != "" || pass != ""){
+            mView?.showError("You must fill up all field")
+            return
+        }
         val mDatabaseReference: DatabaseReference? = FirebaseDatabase.getInstance().reference
         mAuth= FirebaseAuth.getInstance()
         mAuth.createUserWithEmailAndPassword(email, pass)

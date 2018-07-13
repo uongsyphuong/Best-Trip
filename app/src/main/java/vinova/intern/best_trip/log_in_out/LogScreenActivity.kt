@@ -5,11 +5,9 @@ import android.view.View
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.GravityCompat
 import androidx.fragment.app.FragmentManager
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.activity_log_screen.*
-import kotlinx.android.synthetic.main.content_log_screen.*
 import vinova.intern.best_trip.R
 import vinova.intern.best_trip.adapter.PageAdapter
 
@@ -22,10 +20,7 @@ class LogScreenActivity : AppCompatActivity() {
 	}
 
 	override fun onBackPressed() {
-		if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
-			drawer_layout.closeDrawer(GravityCompat.START)
-		}
-		else if(findViewById<ConstraintLayout>(R.id.signIn).visibility == View.GONE) {
+		if(findViewById<ConstraintLayout>(R.id.signIn).visibility == View.GONE) {
 			findViewById<ConstraintLayout>(R.id.signIn)?.visibility = View.VISIBLE
 			findViewById<FrameLayout>(R.id.forget_frag)?.visibility = View.GONE
 		}
@@ -37,9 +32,9 @@ class LogScreenActivity : AppCompatActivity() {
 	fun changeTab(){
 		val manager:FragmentManager = supportFragmentManager
 		val adapter = PageAdapter(manager)
-		viewPager.adapter = adapter
-		tabLayout.setupWithViewPager(viewPager)
-		viewPager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
+		view_pager.adapter = adapter
+		tab_layout.setupWithViewPager(view_pager)
+		view_pager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tab_layout))
 	}
 
 }

@@ -45,11 +45,7 @@ import vinova.intern.best_trip.model.GetLocation
 import vinova.intern.best_trip.taxiList.TaxiListActivity
 
 
-class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNavigationItemSelectedListener,MapInterface.View
-{
-
-
-
+class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNavigationItemSelectedListener,MapInterface.View {
 	private var mapPresenter : MapInterface.Presenter = MapPresenter(this,this)
 
 	private lateinit var mMap: GoogleMap
@@ -134,8 +130,10 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 	    }
     }, Looper.myLooper())
 }
+
 	var first_time = true
-	 fun onLocationChanged(location : Location) {
+
+	fun onLocationChanged(location : Location) {
 		 startLat = location.latitude
 		 startLong = location.longitude
 
@@ -402,7 +400,6 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 				}
 				for (point in points)
 					polyline.add(point)
-				getLocation.routes[0].legs[0].distance.text
 			}
 		mMap.addPolyline(polyline.width(10f).color(R.color.colorAqua))
 	}

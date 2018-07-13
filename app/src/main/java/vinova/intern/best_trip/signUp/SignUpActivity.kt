@@ -36,7 +36,7 @@ class SignUpActivity : Fragment(),SignUpInterface.View {
 	}
 
 	override fun showError(message: String) {
-		Toast.makeText(context,message,Toast.LENGTH_LONG).show()
+		Toast.makeText(context,message,Toast.LENGTH_SHORT).show()
 	}
 
 	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -52,6 +52,7 @@ class SignUpActivity : Fragment(),SignUpInterface.View {
 		progressBar = view.findViewById(R.id.progress_bar)
 		setListener()
 	}
+
 	fun setListener(){
 		btnSignup?.setOnClickListener {
 			mPresenter.createNewAccount(user_?.text.toString(),email_?.text.toString(),pass_?.text.toString())

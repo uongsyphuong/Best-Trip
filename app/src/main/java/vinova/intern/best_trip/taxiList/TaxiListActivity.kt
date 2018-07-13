@@ -1,30 +1,41 @@
 package vinova.intern.best_trip.taxiList
 
-import android.graphics.Movie
+import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.*
+import android.view.MenuItem
+import android.view.MotionEvent
+import android.view.View
 import android.view.inputmethod.EditorInfo
-import androidx.appcompat.app.AppCompatActivity
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import android.widget.Toast
-import vinova.intern.best_trip.R
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.android.synthetic.main.activity_list_taxi.*
+import com.google.android.material.navigation.NavigationView
+import kotlinx.android.synthetic.main.content_list_taxi.*
+import vinova.intern.best_trip.R
 import vinova.intern.best_trip.adapter.DataAdapter
+import vinova.intern.best_trip.log_in_out.LogScreenActivity
+import vinova.intern.best_trip.map.MapActivity
 import vinova.intern.best_trip.model.Taxi
-import vinova.intern.best_trip.utils.getData
-import android.content.Intent
-import android.os.Handler
-import vinova.intern.best_trip.taxiDetail.TaxiDetailActivity
 
 
 
 @Suppress("UNREACHABLE_CODE")
-class TaxiListActivity: AppCompatActivity(), TaxiListInterface.View{
+class TaxiListActivity: AppCompatActivity(), TaxiListInterface.View, NavigationView.OnNavigationItemSelectedListener{
 
+    var mPresenter : TaxiListInterface.Presenter = TaxiListPresenter(this)
+    lateinit var adapter: DataAdapter
+    var toolbar : Toolbar? = null
+    var nav_view : NavigationView? = null
+    var drawer_layout: DrawerLayout? = null
 
     override fun getListTaxiSuccess(listTaxi: MutableList<Taxi?>) {
         adapter.setData(listTaxi)
@@ -35,9 +46,6 @@ class TaxiListActivity: AppCompatActivity(), TaxiListInterface.View{
         else tvNoMatches.visibility = View.GONE
 
     }
-
-    var mPresenter : TaxiListInterface.Presenter = TaxiListPresenter(this)
-    lateinit var adapter: DataAdapter
 
 
     override fun setPresenter(presenter: TaxiListInterface.Presenter) {
@@ -56,6 +64,8 @@ class TaxiListActivity: AppCompatActivity(), TaxiListInterface.View{
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_list_taxi)
+        toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
         val mLayoutManager = LinearLayoutManager(this)
         list_taxi.layoutManager = mLayoutManager
         adapter = DataAdapter(this)
@@ -66,7 +76,13 @@ class TaxiListActivity: AppCompatActivity(), TaxiListInterface.View{
 
         mPresenter.getListTaxi()
 
+        setListener()
 
+        setNavigationDrawer()
+
+    }
+
+    private fun setListener(){
         edt_search_taxi.setOnClickListener { edt_search_taxi.setCursorVisible(true) }
 
         edt_search_taxi.setOnTouchListener(View.OnTouchListener { view, motionEvent ->
@@ -116,7 +132,40 @@ class TaxiListActivity: AppCompatActivity(), TaxiListInterface.View{
                 }, 2000)
             }
         })
-
-
     }
+
+    private fun setNavigationDrawer(){
+        drawer_layout = findViewById<DrawerLayout>(R.id.drawer_layout)
+        nav_view = findViewById(R.id.nav_view)
+        val toggle = ActionBarDrawerToggle(
+                this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+        drawer_layout?.addDrawerListener(toggle)
+        toggle.syncState()
+        nav_view?.setNavigationItemSelectedListener(this)
+    }
+
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        drawer_layout?.closeDrawer(GravityCompat.START)
+        when (item.itemId) {
+            R.id.home -> {
+                startActivity(Intent(this,MapActivity::class.java))
+                finish()
+            }
+            R.id.taxi -> {
+
+            }
+            R.id.out -> {
+                mPresenter.signOut()
+            }
+        }
+        return true
+    }
+
+    override fun goToLogScreen() {
+        startActivity(Intent(this, LogScreenActivity::class.java))
+        overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right)
+        finish()
+    }
+
+
 }

@@ -20,20 +20,23 @@ class SignInPresenter(view: SignInInterface.View) :SignInInterface.Presenter{
     override fun loginUser(email:String?, pass:String?) {
         mView?.showLoading(true)
         if (email!=null && pass!=null)
-            FirebaseAuth.getInstance()
-                    .signInWithEmailAndPassword(email,pass)
-                    .addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
+            if (email != "" && pass != "")
+                FirebaseAuth.getInstance()
+                        .signInWithEmailAndPassword(email,pass)
+                        .addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
 
-                            mView!!.signInSuccess()
+                                mView!!.signInSuccess()
+                            }
+                            else {
+                                mView?.showLoading(false)
+                                mView!!.showError("Authentication failed")
+                            }
                         }
-                        else {
-                            mView?.showLoading(false)
-                            mView!!.showError("Authentication failed")
-                        }
-                    }
-        else
-            mView?.showError("You must fill up user and password")
+            else {
+                mView?.showLoading(false)
+                mView?.showError("You must fill up all field")
+            }
     }
 
     override fun handleFacebookAccessToken(loginResult: LoginResult) {

@@ -90,7 +90,7 @@ data class GetLocation (
 class Leg (
 		@SerializedName("distance")
 	@Expose
-	var distance: Distance,
+		var distance: Distance,
 		@SerializedName("duration")
 	@Expose
 	var duration: Duration,

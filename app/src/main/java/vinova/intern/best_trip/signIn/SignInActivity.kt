@@ -2,7 +2,6 @@ package vinova.intern.best_trip.signIn
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,9 +11,6 @@ import androidx.fragment.app.Fragment
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
 import com.facebook.FacebookException
-import com.facebook.FacebookSdk
-import com.facebook.FacebookSdk.getApplicationContext
-import com.facebook.appevents.AppEventsLogger
 import com.facebook.login.LoginResult
 import com.facebook.login.widget.LoginButton
 import vinova.intern.best_trip.R
@@ -55,7 +51,7 @@ class SignInActivity : Fragment(),SignInInterface.View{
 	}
 
 	override fun showError(message: String) {
-		Toast.makeText(context,message,Toast.LENGTH_LONG).show()
+		Toast.makeText(context,message,Toast.LENGTH_SHORT).show()
 	}
 
 	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

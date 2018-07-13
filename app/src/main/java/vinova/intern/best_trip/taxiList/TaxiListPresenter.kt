@@ -1,11 +1,20 @@
 package vinova.intern.best_trip.taxiList
 
-import com.google.firebase.database.*
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import vinova.intern.best_trip.adapter.DataAdapter
 import vinova.intern.best_trip.model.Taxi
-import java.util.ArrayList
+import java.util.*
 
 class TaxiListPresenter(view: TaxiListInterface.View):TaxiListInterface.Presenter{
+    override fun signOut() {
+        FirebaseAuth.getInstance().signOut()
+        mView?.goToLogScreen()
+    }
+
     var arrayTaxiName: ArrayList<String> = ArrayList()
 
 
