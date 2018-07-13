@@ -6,14 +6,19 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.provider.MediaStore
+import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.UploadTask
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import vinova.intern.best_trip.api.CallApi
+import vinova.intern.best_trip.model.Distance
 import vinova.intern.best_trip.model.GetLocation
+import vinova.intern.best_trip.model.Taxi
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 
@@ -75,13 +80,71 @@ class MapPresenter(view : MapInterface.View, var context: Context):MapInterface.
 
 		val byteArrayOutputStream = ByteArrayOutputStream()
 		bitmap.compress(Bitmap.CompressFormat.JPEG,1,byteArrayOutputStream)
-		profileRef?.putBytes(byteArrayOutputStream.toByteArray())
+		profileRef?.putBytes(byteArrayOutputStream.toByteArray())?.addOnSuccessListener {
+			OnSuccessListener<UploadTask.TaskSnapshot> { taskSnapshot ->
+				val userReference: DatabaseReference = FirebaseDatabase.getInstance().reference.child("user")
+				val text = taskSnapshot.metadata?.path
+				userReference.child(userRef?.uid.toString()).child("image").setValue(taskSnapshot?.metadata?.path.toString())
+			}
+		}
+
+
 	}
 
+	fun calcPrice(distance: Float) {
+		val distanceKm  = distance/1000
+		val mDatabaseReference = FirebaseDatabase.getInstance().reference.child("taxi")
+		val listTaxi: MutableList<Taxi?> = mutableListOf()
+		mDatabaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
+			override fun onDataChange(dataSnapshot: DataSnapshot) {
+				val children = dataSnapshot.children
 
+				children.forEach {
+					val data = it.getValue(Taxi::class.java)
+					data?.distance = distanceKm
+					data?.price = price(distanceKm, data?.fourSeaters, data?.sevenSeaters)
+					if (data != null) {
+						listTaxi.add(data)
+					}
+				}
 
+				//mView?.getListTaxiSuccess(listTaxi)
+			}
 
+			override fun onCancelled(p0: DatabaseError) {
+				// Failed to read value
+			}
+		})
+	}
 
+	private fun price(distanceKm: Float, fourSeater:HashMap<String,Float>?, sevenSeater:HashMap<String,Float>?): HashMap<String, Float>? {
+		if (distanceKm < 30 && distanceKm < 1) {
+			if (fourSeater != null && sevenSeater != null) {
+				val feeFour = fourSeater["first"]
+				val feeSeven = sevenSeater["first"]
+				if (feeFour != null && feeSeven != null) {
+					return hashMapOf("fourSeater" to distanceKm * feeFour, "sevenSeater" to distanceKm * feeSeven)
+				}
+			}
+		}
+		if (distanceKm > 30) {
+			if (fourSeater != null && sevenSeater != null) {
+				val feeFiFour = fourSeater["first"]
+				val feeFiSeven = sevenSeater["first"]
+				val feeAfFour = fourSeater["after"]
+				val feeAfSeven = sevenSeater["after"]
+				if (feeFiFour != null && feeFiSeven != null && feeAfFour != null && feeAfSeven != null) {
+					return hashMapOf("fourSeater" to (30 * feeFiFour + (distanceKm - 30) * feeAfFour),
+							"sevenSeater" to (30 * feeFiSeven + (distanceKm - 30) * feeAfSeven))
+				}
+			}
+		}
+		val feeFou = fourSeater?.get("open_door")
+		val feeSev = sevenSeater?.get("open_door")
+		return if (feeFou != null && feeSev != null) {
+			hashMapOf("fourSeater" to feeFou,
+					"sevenSeater" to feeSev)
+		} else null
 
-
+	}
 }

@@ -17,6 +17,7 @@ import vinova.intern.best_trip.adapter.DataAdapter
 import vinova.intern.best_trip.model.Taxi
 import vinova.intern.best_trip.utils.getData
 import android.content.Intent
+import android.os.Handler
 import vinova.intern.best_trip.taxiDetail.TaxiDetailActivity
 
 
@@ -110,8 +111,9 @@ class TaxiListActivity: AppCompatActivity(), TaxiListInterface.View{
             }
 
             override fun afterTextChanged(editable: Editable) {
-                mPresenter.searchData(edt_search_taxi.text.toString(), adapter)
-
+                Handler().postDelayed({
+                    mPresenter.searchData(edt_search_taxi.text.toString(), adapter)
+                }, 2000)
             }
         })
 

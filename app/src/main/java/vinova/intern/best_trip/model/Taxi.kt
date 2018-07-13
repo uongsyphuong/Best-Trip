@@ -5,22 +5,28 @@ package vinova.intern.best_trip.model
 import android.os.Parcel
 import android.os.Parcelable
 
-class Taxi : Parcelable {
+
+class Taxi :Parcelable {
     var name: String? = null
     var phone:String = ""
     var logo:String = ""
     var about:String = ""
-    var fourSeaters: HashMap<String,Long>? =null
-    var sevenSeaters: HashMap<String,Long>? = null
+    var fourSeaters: HashMap<String,Float>? =null
+    var sevenSeaters: HashMap<String,Float>? = null
+    var distance:Float? = null
+    var price: HashMap<String, Float>? = hashMapOf()
 
     constructor(parcel: Parcel) : this() {
         name = parcel.readString()
         phone = parcel.readString()
         logo = parcel.readString()
         about = parcel.readString()
-        fourSeaters = parcel.readSerializable() as HashMap<String, Long>?
-        sevenSeaters = parcel.readSerializable() as HashMap<String, Long>?
+        fourSeaters = parcel.readSerializable() as HashMap<String, Float>
+        sevenSeaters = parcel.readSerializable() as HashMap<String, Float>
+        distance = parcel.readValue(Int::class.java.classLoader) as? Float
+        price = parcel.readSerializable() as HashMap<String, Float>
     }
+
 
     constructor()
 
@@ -31,6 +37,8 @@ class Taxi : Parcelable {
         parcel.writeString(about)
         parcel.writeSerializable(fourSeaters)
         parcel.writeSerializable(sevenSeaters)
+        parcel.writeValue(distance)
+        parcel.writeSerializable(price)
     }
 
     override fun describeContents(): Int {
@@ -46,5 +54,6 @@ class Taxi : Parcelable {
             return arrayOfNulls(size)
         }
     }
+
 
 }
