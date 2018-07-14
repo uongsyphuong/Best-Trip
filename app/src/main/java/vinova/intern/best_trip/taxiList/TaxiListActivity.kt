@@ -62,6 +62,12 @@ class TaxiListActivity: AppCompatActivity(), TaxiListInterface.View, NavigationV
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+        swipeRefresh.setOnRefreshListener {
+            adapter.clearData()
+            mPresenter.getListTaxi()
+            swipeRefresh.isRefreshing = false
+        }
+
         mPresenter.getListTaxi()
 
         setListener()

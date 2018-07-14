@@ -19,7 +19,7 @@ import java.util.*
 class TaxiListPresenter(view: TaxiListInterface.View):TaxiListInterface.Presenter{
     var storage: FirebaseStorage? = null
     var storageReference: StorageReference? = null
-
+    private var isFirst:Boolean = true
     val userRef  = FirebaseAuth.getInstance().currentUser
 
     override fun signOut() {
@@ -75,7 +75,7 @@ class TaxiListPresenter(view: TaxiListInterface.View):TaxiListInterface.Presente
     var mView: TaxiListInterface.View? = view
 
     override fun getListTaxi() {
-        mView?.showLoading(true)
+        if (isFirst) mView?.showLoading(true)
         val mDatabaseReference = FirebaseDatabase.getInstance().reference.child("taxi")
         val listTaxi: MutableList<Taxi?> = mutableListOf()
         mDatabaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -86,9 +86,10 @@ class TaxiListPresenter(view: TaxiListInterface.View):TaxiListInterface.Presente
                     val data = it.getValue(Taxi::class.java)
                     if (data != null) {
                         listTaxi.add(data)
-                        arrayTaxiName.add(data.name.toString())
+                        if (isFirst) arrayTaxiName.add(data.name.toString())
                     }
                 }
+                isFirst = false
                 mView?.showLoading(false)
                 mView?.getListTaxiSuccess(listTaxi)
             }

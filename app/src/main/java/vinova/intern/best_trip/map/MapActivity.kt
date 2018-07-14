@@ -389,7 +389,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 	}
 
 	override fun showLoading(isShow: Boolean) {
-
+		pro_bar_map.visibility = if (isShow) View.VISIBLE else View.GONE
 	}
 
 	override fun showError(message: String) {
