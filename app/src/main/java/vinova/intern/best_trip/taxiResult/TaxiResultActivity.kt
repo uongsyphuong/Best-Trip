@@ -11,11 +11,17 @@ import vinova.intern.best_trip.model.Taxi
 class TaxiResultActivity: AppCompatActivity(){
     lateinit var adapter: TaxiResultAdapter
     lateinit var taxi: MutableList<Taxi?>
-    var is4Seater:Boolean  = false
+    private var is4Seater:Boolean  = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view_all_list_taxi)
+        setSupportActionBar(tool_bar_view_all)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        tool_bar_view_all.setNavigationOnClickListener {
+            onBackPressed()
+        }
 
         val bundle = intent.extras
         taxi = bundle.getParcelableArrayList("taxi")
@@ -33,7 +39,8 @@ class TaxiResultActivity: AppCompatActivity(){
         all_list_taxi.layoutManager = mLayoutManager
         adapter = TaxiResultAdapter()
         all_list_taxi.adapter = adapter
-        adapter.setData(taxi)
+        adapter.setData(taxi,intent.getStringExtra("desti"))
+        destination.text = intent.getStringExtra("desti")
     }
 
 }

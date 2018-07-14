@@ -14,7 +14,7 @@ import java.text.DecimalFormat
 
 class TaxiResultAdapter: RecyclerView.Adapter<TaxiResultAdapter.TaxiResultHolder>() {
 	var taxiList: MutableList<Taxi?> = mutableListOf()
-
+	var ori_desti : String = ""
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaxiResultHolder {
 		return TaxiResultHolder(LayoutInflater.from(parent.context).inflate(R.layout.taxi_result_item, parent, false))
 	}
@@ -40,7 +40,7 @@ class TaxiResultAdapter: RecyclerView.Adapter<TaxiResultAdapter.TaxiResultHolder
 			val bundle = Bundle()
 			bundle.putParcelable("taxi", taxiList[position])
 			val intent = Intent (holder.itemView.context, TaxiDetailActivity::class.java )
-			intent.putExtras(bundle)
+			intent.putExtras(bundle).putExtra("desti",ori_desti)
 			holder.itemView.context.startActivity(intent)
 		}
 	}
@@ -58,9 +58,10 @@ class TaxiResultAdapter: RecyclerView.Adapter<TaxiResultAdapter.TaxiResultHolder
 			price = itemView.findViewById(R.id.price)
 		}
 	}
-	fun setData(data:MutableList<Taxi?>){
+	fun setData(data:MutableList<Taxi?>,address:String){
 		taxiList.clear()
 		taxiList = data
+		ori_desti = address
 		notifyDataSetChanged()
 	}
 }

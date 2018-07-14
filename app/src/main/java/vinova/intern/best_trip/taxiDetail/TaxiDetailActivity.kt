@@ -39,6 +39,7 @@ class TaxiDetailActivity: AppCompatActivity(){
         when{
             taxi.fourSeaters != null && taxi.sevenSeaters != null->{
                 ct_trip.visibility = View.GONE
+                cardView.visibility = View.GONE
                 fee_open_door.text = formatter.format(taxi.fourSeaters?.get("open_door"))
                 fee_first.text = formatter.format(taxi.fourSeaters?.get("first"))
                 fee_over.text = formatter.format(taxi.fourSeaters?.get("after"))
@@ -65,6 +66,7 @@ class TaxiDetailActivity: AppCompatActivity(){
                 fee_over7.text = formatter.format(taxi.sevenSeaters?.get("after"))
             }
         }
+        destination.text = intent.getStringExtra("desti")
 
         Glide.with(this)
                 .load(taxi.logo)
@@ -90,7 +92,7 @@ class TaxiDetailActivity: AppCompatActivity(){
     @SuppressLint("MissingPermission")
     private fun startCall(){
         val intent = Intent(Intent.ACTION_CALL)
-        intent.data = Uri.parse("tel:0969981853")
+        intent.data = Uri.parse("tel:${taxi.phone}")
         startActivity(intent)
     }
 
