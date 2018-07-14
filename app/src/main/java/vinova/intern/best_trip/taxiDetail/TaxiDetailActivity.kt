@@ -6,17 +6,15 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
-import android.os.PersistableBundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.bumptech.glide.Glide
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_detail_taxi.*
+import kotlinx.android.synthetic.main.app_bar_detail_taxi.*
 import kotlinx.android.synthetic.main.free_breakdown.*
 import vinova.intern.best_trip.R
 import vinova.intern.best_trip.model.Taxi
-import java.lang.reflect.Array.get
 import java.text.DecimalFormat
 
 class TaxiDetailActivity: AppCompatActivity(){
@@ -25,9 +23,12 @@ class TaxiDetailActivity: AppCompatActivity(){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail_taxi)
 
+        setSupportActionBar(toolbar_detail)
         val bundle = intent.extras
         taxi = bundle.getParcelable("taxi")
-
+        title = taxi.name
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
 
         val formatter = DecimalFormat("#,###")
 
@@ -55,7 +56,12 @@ class TaxiDetailActivity: AppCompatActivity(){
             }
 
         }
+        toolbar_detail.setNavigationOnClickListener {
+            onBackPressed()
+        }
+        checkType()
     }
+
     @SuppressLint("MissingPermission")
     private fun startCall(){
         val intent = Intent(Intent.ACTION_CALL)
@@ -67,5 +73,20 @@ class TaxiDetailActivity: AppCompatActivity(){
         if(requestCode == 1 )
             startCall()
     }
+
+    fun checkType(){
+        when{
+            taxi.fourSeaters != null && taxi.sevenSeaters != null->{
+                constraintLayout.visibility = View.GONE
+            }
+            taxi.fourSeaters == null && taxi.sevenSeaters != null->{
+
+            }
+            taxi.fourSeaters != null && taxi.sevenSeaters == null->{
+
+            }
+        }
+    }
+
 
 }

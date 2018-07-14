@@ -18,6 +18,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.content_list_taxi.*
 import vinova.intern.best_trip.R
@@ -25,7 +26,7 @@ import vinova.intern.best_trip.adapter.DataAdapter
 import vinova.intern.best_trip.log_in_out.LogScreenActivity
 import vinova.intern.best_trip.map.MapActivity
 import vinova.intern.best_trip.model.Taxi
-
+import vinova.intern.best_trip.model.User
 
 
 @Suppress("UNREACHABLE_CODE")
@@ -37,29 +38,7 @@ class TaxiListActivity: AppCompatActivity(), TaxiListInterface.View, NavigationV
     var nav_view : NavigationView? = null
     var drawer_layout: DrawerLayout? = null
 
-    override fun getListTaxiSuccess(listTaxi: MutableList<Taxi?>) {
-        adapter.setData(listTaxi)
-    }
 
-    override fun setMatches(boolean: Boolean) {
-        if(boolean) tvNoMatches.visibility = View.VISIBLE
-        else tvNoMatches.visibility = View.GONE
-
-    }
-
-
-    override fun setPresenter(presenter: TaxiListInterface.Presenter) {
-        this.mPresenter = presenter
-    }
-
-    override fun showLoading(isShow: Boolean) {
-        pro_bar_list_taxi.visibility = if (isShow) View.VISIBLE else View.GONE
-
-    }
-
-    override fun showError(message: String) {
-        Toast.makeText(this,message, Toast.LENGTH_LONG).show()
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,7 +59,54 @@ class TaxiListActivity: AppCompatActivity(), TaxiListInterface.View, NavigationV
 
         setNavigationDrawer()
 
+        setUser()
     }
+    override fun getListTaxiSuccess(listTaxi: MutableList<Taxi?>) {
+        adapter.setData(listTaxi)
+    }
+
+    override fun setMatches(boolean: Boolean) {
+        if(boolean) tvNoMatches.visibility = View.VISIBLE
+        else tvNoMatches.visibility = View.GONE
+
+    }
+
+    override fun setPresenter(presenter: TaxiListInterface.Presenter) {
+        this.mPresenter = presenter
+    }
+
+    override fun showLoading(isShow: Boolean) {
+        pro_bar_list_taxi.visibility = if (isShow) View.VISIBLE else View.GONE
+
+    }
+
+    override fun showError(message: String) {
+        Toast.makeText(this,message, Toast.LENGTH_LONG).show()
+    }
+
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        drawer_layout?.closeDrawer(GravityCompat.START)
+        when (item.itemId) {
+            R.id.home -> {
+                startActivity(Intent(this,MapActivity::class.java))
+                finish()
+            }
+            R.id.taxi -> {
+
+            }
+            R.id.out -> {
+                mPresenter.signOut()
+            }
+        }
+        return true
+    }
+
+    override fun goToLogScreen() {
+        startActivity(Intent(this, LogScreenActivity::class.java))
+        overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right)
+        finish()
+    }
+
 
     private fun setListener(){
         edt_search_taxi.setOnClickListener { edt_search_taxi.setCursorVisible(true) }
@@ -144,27 +170,12 @@ class TaxiListActivity: AppCompatActivity(), TaxiListInterface.View, NavigationV
         nav_view?.setNavigationItemSelectedListener(this)
     }
 
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        drawer_layout?.closeDrawer(GravityCompat.START)
-        when (item.itemId) {
-            R.id.home -> {
-                startActivity(Intent(this,MapActivity::class.java))
-                finish()
-            }
-            R.id.taxi -> {
-
-            }
-            R.id.out -> {
-                mPresenter.signOut()
-            }
-        }
-        return true
-    }
-
-    override fun goToLogScreen() {
-        startActivity(Intent(this, LogScreenActivity::class.java))
-        overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right)
-        finish()
+    private fun setUser(){
+        val user = intent.getParcelableExtra<User>("user")
+        val a = findViewById<NavigationView>(R.id.nav_view).getHeaderView(0)
+        a.findViewById<TextView>(R.id.user_name).text = user.username
+        a.findViewById<TextView>(R.id.user_email).text = user.email
+        Glide.with(this).load(user.image).into(a.findViewById(R.id.image_profile))
     }
 
 

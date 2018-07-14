@@ -7,25 +7,19 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.provider.MediaStore
 import android.util.Log
-import com.google.android.gms.tasks.Continuation
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.OnSuccessListener
-import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import com.google.firebase.storage.UploadTask
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import vinova.intern.best_trip.api.CallApi
-import vinova.intern.best_trip.model.Distance
 import vinova.intern.best_trip.model.GetLocation
 import vinova.intern.best_trip.model.Taxi
+import vinova.intern.best_trip.model.User
 import java.io.ByteArrayOutputStream
 import java.io.IOException
-import java.text.DecimalFormat
 
 
 class MapPresenter(view : MapInterface.View, var context: Context):MapInterface.Presenter {
@@ -180,5 +174,22 @@ class MapPresenter(view : MapInterface.View, var context: Context):MapInterface.
 			}
 		}
 		return sevenSeater?.get("open_door")
+	}
+
+	override fun getUser(uid: String?){
+		if (uid!= null) {
+			val mDatabaseReference = FirebaseDatabase.getInstance().reference.child("user").child(uid)
+			mDatabaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
+				override fun onDataChange(dataSnapshot: DataSnapshot) {
+					val user = dataSnapshot.getValue(User::class.java)
+					//mView?.showLoading(false)
+					mView?.getUserSuccess(user)
+				}
+
+				override fun onCancelled(p0: DatabaseError) {
+					// Failed to read value
+				}
+			})
+		}
 	}
 }

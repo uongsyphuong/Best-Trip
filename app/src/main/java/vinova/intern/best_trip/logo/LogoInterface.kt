@@ -9,7 +9,7 @@ interface LogoInterface {
         fun getUserSuccess (user: User?)
     }
     interface Presenter{
-        fun getUser(uid: String)
+        fun getUser(uid: String?)
         fun checkAutologin():Boolean
     }
 

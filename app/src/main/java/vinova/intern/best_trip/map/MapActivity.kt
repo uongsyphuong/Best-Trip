@@ -12,8 +12,6 @@ import android.os.Looper
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
 import android.widget.*
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -25,6 +23,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import com.bumptech.glide.Glide
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException
 import com.google.android.gms.common.GooglePlayServicesRepairableException
 import com.google.android.gms.location.*
@@ -40,80 +39,42 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PolylineOptions
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.app_bar_map.*
+import kotlinx.android.synthetic.main.bottom_sheet_content_map.*
 import vinova.intern.best_trip.R
 import vinova.intern.best_trip.log_in_out.LogScreenActivity
 import vinova.intern.best_trip.model.GetLocation
 import vinova.intern.best_trip.model.Taxi
+import vinova.intern.best_trip.model.User
 import vinova.intern.best_trip.taxiList.TaxiListActivity
 import java.text.DecimalFormat
 
 
 class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNavigationItemSelectedListener,MapInterface.View {
-
-
 	private lateinit var listTaxiFour4:MutableList<Taxi?>
 	private lateinit var listTaxiSeven7:MutableList<Taxi?>
-	override fun getListTaxiAndPriceSuccess(listTaxiFour: MutableList<Taxi?>, listTaxiSeven: MutableList<Taxi?>) {
-		listTaxiFour4 = listTaxiFour
-		listTaxiSeven7 = listTaxiSeven
-		var cardView : CardView = findViewById(R.id.itemOne)
-		setResult(cardView,listTaxiFour[0],true)
-
-		cardView = findViewById(R.id.itemTwo)
-		setResult(cardView,listTaxiFour[1],true)
-
-		cardView = findViewById(R.id.item7One)
-		setResult(cardView,listTaxiSeven[0],false)
-
-		cardView = findViewById(R.id.item7Two)
-		setResult(cardView,listTaxiSeven[1],false)
-		bottom_sheet_layout.visibility = View.VISIBLE
-
-	}
-
-	private fun setResult(cardView: CardView,taxi: Taxi?,is4 : Boolean){
-		val name : TextView = cardView.findViewById(R.id.name_taxi)
-		val phone : TextView = cardView.findViewById(R.id.phone_taxi)
-		val price : TextView = cardView.findViewById(R.id.price)
-		val formatter = DecimalFormat("#,###")
-
-		if (taxi!= null){
-			name.text = taxi.name
-			phone.text = taxi.phone
-			price.text = formatter.format( if (is4) taxi.priceFour else taxi.priceSeven)
-		}
-	}
-
 	private var mapPresenter : MapInterface.Presenter = MapPresenter(this,this)
-
 	private lateinit var mMap: GoogleMap
 	private val LOCATION_PERMISSION_REQUEST_CODE = 1
 	private val CAMERA_REQUEST = 1888
 	private val MY_CAMERA_PERMISSION_CODE = 100
 	private val PLACE_AUTO_COMPLETE = 2
-
-	private var slideUp : Animation? = null
-	private var slideDown : Animation? = null
 	private var show = false
-	var camera : TextView? = null
-	var gallery : TextView? = null
-
-	var startLat:Double? = 0.0
-	var startLong : Double? = 0.0
-
-	var toolbar : Toolbar? = null
-	var nav_view : NavigationView? = null
-	var search_place : EditText? = null
-	var drawer_layout: DrawerLayout? = null
-
+	private var camera : TextView? = null
+	private var gallery : TextView? = null
+	private var startLat:Double? = 0.0
+	private var startLong : Double? = 0.0
+	private var toolbar : Toolbar? = null
+	private var nav_view : NavigationView? = null
+	private var search_place : EditText? = null
+	private var drawer_layout: DrawerLayout? = null
 	private lateinit var mLocationRequest: LocationRequest
-
 	private val UPDATE_INTERVAL = (10 * 1000).toLong()  /* 10 secs */
 	private val FASTEST_INTERVAL: Long = 2000 /* 2 sec */
-
-	lateinit var sheetBehavior : BottomSheetBehavior<ConstraintLayout>
-	var constraintLayout : ConstraintLayout? = null
+	private lateinit var sheetBehavior : BottomSheetBehavior<ConstraintLayout>
+	private var constraintLayout : ConstraintLayout? = null
+	private var user:User? = null
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -123,22 +84,9 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 		// Obtain the SupportMapFragment and get notified when the map is ready to be used.
 		setMyLocationButton()
 		setNavigationDrawer()
-		animation()
-
 		setListener()
 		startLocationUpdates()
-		val  outer : CoordinatorLayout = findViewById(R.id.app_bar_layout)
-		constraintLayout = outer.findViewById(R.id.bottom_sheet_layout)
-		sheetBehavior = BottomSheetBehavior.from(constraintLayout)
-		sheetBehavior.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback(){
-			override fun onSlide(p0: View, p1: Float) {
-
-			}
-
-			override fun onStateChanged(p0: View, p1: Int) {
-
-			}
-		})
+		setBottomSheet()
 	}
 
 	@SuppressLint("MissingPermission")
@@ -177,8 +125,8 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 		 val latLng = LatLng(location.latitude, location.longitude)
 		 mMap.addCircle(CircleOptions().center(latLng))
 		 if (first_time){
-			 mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng))
 			 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12.0f))
+			 mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng))
 			 first_time = false
 		 }
 
@@ -202,10 +150,15 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 				startLong = p0.longitude
 				mMap.addMarker(MarkerOptions().position(LatLng(p0.latitude,
 						p0.longitude)))
+				mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(p0.latitude,
+						p0.longitude), 12.0f))
+				mMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(p0.latitude,
+						p0.longitude)))
 			}
 
 			override fun onMyLocationButtonClick(): Boolean {
-				mMap.setMinZoomPreference(15f)
+				mMap.setMinZoomPreference(1f)
+				mMap.setMaxZoomPreference(100f)
 				return false
 			}
 		})
@@ -214,11 +167,13 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 			startLong = p0.longitude
 			mMap.addMarker(MarkerOptions().position(LatLng(p0.latitude,
 					p0.longitude)))
+			mMap.setMaxZoomPreference(1000000000000000f)
 		}
 
-		mMap.setMinZoomPreference(11f)
+		mMap.setMinZoomPreference(1f)
 		mMap.setMaxZoomPreference(100f)
 	}
+
 
 	private fun enableMyLocationIfPermitted() {
 		if (ContextCompat.checkSelfPermission(this,
@@ -261,9 +216,19 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 		}
 	}
 
-	private fun animation(){
-		slideUp = AnimationUtils.loadAnimation(this,R.anim.slide_up)
-		slideDown = AnimationUtils.loadAnimation(this,R.anim.slide_down)
+	private fun setBottomSheet(){
+		val  outer : CoordinatorLayout = findViewById(R.id.app_bar_layout)
+		constraintLayout = outer.findViewById(R.id.bottom_sheet_layout)
+		sheetBehavior = BottomSheetBehavior.from(constraintLayout)
+		sheetBehavior.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback(){
+			override fun onSlide(p0: View, p1: Float) {
+
+			}
+
+			override fun onStateChanged(p0: View, p1: Int) {
+
+			}
+		})
 	}
 
 	private fun setMyLocationButton(){
@@ -286,6 +251,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 		drawer_layout?.addDrawerListener(toggle)
 		toggle.syncState()
 		nav_view?.setNavigationItemSelectedListener(this)
+		mapPresenter.getUser(FirebaseAuth.getInstance().uid)
 	}
 
 	private fun setListener(){
@@ -340,6 +306,13 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 			}
 		}
 
+		viewAllSevenSeat.setOnClickListener{
+
+		}
+
+		viewAllFourSeat.setOnClickListener {
+
+		}
 	}
 
 	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -399,7 +372,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 				// Handle the camera action
 			}
 			R.id.taxi -> {
-				val intent =Intent ( this, TaxiListActivity::class.java)
+				val intent =Intent ( this, TaxiListActivity::class.java).putExtra("user",user)
 				startActivity(intent)
 			}
 			R.id.out -> {
@@ -480,4 +453,42 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 		return poly
 	}
 
+	override fun getListTaxiAndPriceSuccess(listTaxiFour: MutableList<Taxi?>, listTaxiSeven: MutableList<Taxi?>) {
+		listTaxiFour4 = listTaxiFour
+		listTaxiSeven7 = listTaxiSeven
+		var cardView : CardView = findViewById(R.id.itemOne)
+		setResult(cardView,listTaxiFour[0],true)
+
+		cardView = findViewById(R.id.itemTwo)
+		setResult(cardView,listTaxiFour[1],true)
+
+		cardView = findViewById(R.id.item7One)
+		setResult(cardView,listTaxiSeven[0],false)
+
+		cardView = findViewById(R.id.item7Two)
+		setResult(cardView,listTaxiSeven[1],false)
+		bottom_sheet_layout.visibility = View.VISIBLE
+
+	}
+
+	private fun setResult(cardView: CardView,taxi: Taxi?,is4 : Boolean){
+		val name : TextView = cardView.findViewById(R.id.name_taxi)
+		val phone : TextView = cardView.findViewById(R.id.phone_taxi)
+		val price : TextView = cardView.findViewById(R.id.price)
+		val formatter = DecimalFormat("#,###")
+
+		if (taxi!= null){
+			name.text = taxi.name
+			phone.text = taxi.phone
+			price.text = formatter.format( if (is4) taxi.priceFour else taxi.priceSeven)
+		}
+	}
+
+	override fun getUserSuccess(user: User?) {
+		this.user = user
+		val a = findViewById<NavigationView>(R.id.nav_view).getHeaderView(0)
+		a.findViewById<TextView>(R.id.user_name).text = user?.username
+		a.findViewById<TextView>(R.id.user_email).text = user?.email
+		Glide.with(this).load(user?.image).into(a.findViewById(R.id.image_profile))
+	}
 }

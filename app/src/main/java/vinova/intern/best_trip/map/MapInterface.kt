@@ -6,6 +6,7 @@ import android.graphics.Bitmap
 import vinova.intern.best_trip.baseInterface.BaseView
 import vinova.intern.best_trip.model.GetLocation
 import vinova.intern.best_trip.model.Taxi
+import vinova.intern.best_trip.model.User
 
 interface MapInterface {
 	interface View : BaseView<Presenter>{
@@ -13,6 +14,7 @@ interface MapInterface {
 		fun setImg(bitmap: Bitmap)
 		fun drawRoute(getLocation : GetLocation?)
 		fun getListTaxiAndPriceSuccess(listTaxiFour :MutableList<Taxi?>,listTaxiSeven :MutableList<Taxi?>)
+		fun getUserSuccess (user: User?)
 	}
 	interface Presenter{
 		fun signOut()
@@ -20,5 +22,6 @@ interface MapInterface {
 		fun takePhoto(data : Intent, contentResolver: ContentResolver)
 		fun drawRoute(ori : String,desti : String)
 		fun calcPrice(distance: Float)
+		fun getUser(uid: String?)
 	}
 }
