@@ -1,6 +1,10 @@
 package vinova.intern.best_trip.taxiList
 
+import android.Manifest
+import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.os.Handler
 import android.text.Editable
@@ -10,6 +14,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -38,7 +43,11 @@ class TaxiListActivity: AppCompatActivity(), TaxiListInterface.View, NavigationV
     var nav_view : NavigationView? = null
     var drawer_layout: DrawerLayout? = null
 
-
+    private var show = false
+    private var camera : TextView? = null
+    private var gallery : TextView? = null
+    private val CAMERA_REQUEST = 1888
+    private val MY_CAMERA_PERMISSION_CODE = 100
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -158,6 +167,42 @@ class TaxiListActivity: AppCompatActivity(), TaxiListInterface.View, NavigationV
                 }, 2000)
             }
         })
+
+        gallery = findViewById<NavigationView>(R.id.nav_view).getHeaderView(0).findViewById<TextView>(R.id.gallery)
+        camera = findViewById<NavigationView>(R.id.nav_view).getHeaderView(0).findViewById<TextView>(R.id.camera)
+
+        findViewById<NavigationView>(R.id.nav_view).getHeaderView(0).findViewById<ImageView>(R.id.image_profile).
+                setOnClickListener {
+                    if (show){
+                        camera?.visibility = View.GONE
+                        gallery?.visibility = View.GONE
+                        show = false
+                    }
+                    else{
+                        show = true
+                        camera?.visibility = View.VISIBLE
+                        gallery?.visibility = View.VISIBLE
+                    }
+                }
+
+        gallery?.setOnClickListener {
+            val intent = Intent()
+            intent.type = "image/*"
+            intent.action = Intent.ACTION_GET_CONTENT
+            startActivityForResult(Intent.createChooser(intent, "Select Picture"), 1)
+        }
+
+        camera?.setOnClickListener{
+            if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+
+                requestPermissions(arrayOf(Manifest.permission.CAMERA), MY_CAMERA_PERMISSION_CODE)
+
+            }
+            else {
+                val cameraIntent = Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE)
+                startActivityForResult(cameraIntent, CAMERA_REQUEST)
+            }
+        }
     }
 
     private fun setNavigationDrawer(){
@@ -178,5 +223,20 @@ class TaxiListActivity: AppCompatActivity(), TaxiListInterface.View, NavigationV
         Glide.with(this).load(user.image).into(a.findViewById(R.id.image_profile))
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK && data!=null ) {
+            mPresenter.takePhoto(data,contentResolver)
+        }
+    }
+    
+    override fun setImg(bitmap: Bitmap) {
+        val imageView : ImageView =  findViewById<NavigationView>(R.id.nav_view).getHeaderView(0)
+                .findViewById(vinova.intern.best_trip.R.id.image_profile)
+        imageView.setImageBitmap(bitmap)
+        camera?.visibility = View.GONE
+        gallery?.visibility = View.GONE
+        show = false
+    }
 
 }

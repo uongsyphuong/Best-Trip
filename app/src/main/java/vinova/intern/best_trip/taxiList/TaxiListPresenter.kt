@@ -1,15 +1,27 @@
 package vinova.intern.best_trip.taxiList
 
+import android.content.ContentResolver
+import android.content.Intent
+import android.graphics.Bitmap
+import android.net.Uri
+import android.provider.MediaStore
+import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import vinova.intern.best_trip.adapter.DataAdapter
 import vinova.intern.best_trip.model.Taxi
+import java.io.ByteArrayOutputStream
+import java.io.IOException
 import java.util.*
 
 class TaxiListPresenter(view: TaxiListInterface.View):TaxiListInterface.Presenter{
+    var storage: FirebaseStorage? = null
+    var storageReference: StorageReference? = null
+
+    val userRef  = FirebaseAuth.getInstance().currentUser
+
     override fun signOut() {
         FirebaseAuth.getInstance().signOut()
         mView?.goToLogScreen()
@@ -89,8 +101,44 @@ class TaxiListPresenter(view: TaxiListInterface.View):TaxiListInterface.Presente
 
     init {
         mView?.setPresenter(this)
+        storage = FirebaseStorage.getInstance()
+        storageReference = storage?.getReference()
     }
 
+    override fun selectImg(data: Intent, contentResolver: ContentResolver) {
+        val uri: Uri = data.data
+        try {
+            val bitmap : Bitmap = MediaStore.Images.Media.getBitmap(contentResolver, uri)
+            upload(bitmap)
+            mView?.setImg(bitmap)
+
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+    }
+
+    override fun takePhoto(data: Intent, contentResolver: ContentResolver) {
+        val bitmap = data.extras.get("data") as Bitmap
+        upload(bitmap)
+        mView?.setImg(bitmap)
+    }
+
+    private fun upload(bitmap: Bitmap){
+        val storageReference = storage?.reference
+        val profileRef = storageReference?.child("images/profile_${userRef?.uid}.png")
+
+        val byteArrayOutputStream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.PNG,100,byteArrayOutputStream)
+        Log.e("abcd", profileRef.toString())
+        profileRef?.putBytes(byteArrayOutputStream.toByteArray())?.addOnSuccessListener {
+            // success
+            profileRef.downloadUrl.addOnCompleteListener { taskSnapshot ->
+                val url = taskSnapshot.result.toString()
+                val userReference: DatabaseReference = FirebaseDatabase.getInstance().reference.child("user")
+                userReference.child(userRef?.uid.toString()).child("image").setValue(url)
+            }
+        }
+    }
 
 
 }
