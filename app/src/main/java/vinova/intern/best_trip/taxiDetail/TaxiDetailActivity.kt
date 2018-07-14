@@ -32,13 +32,35 @@ class TaxiDetailActivity: AppCompatActivity(){
 
         val formatter = DecimalFormat("#,###")
 
-        fee_open_door.text = formatter.format(taxi.fourSeaters?.get("open_door"))
-        fee_first.text = formatter.format(taxi.fourSeaters?.get("first"))
-        fee_over.text = formatter.format(taxi.fourSeaters?.get("after"))
+        when{
+            taxi.fourSeaters != null && taxi.sevenSeaters != null->{
+                ct_trip.visibility = View.GONE
+                fee_open_door.text = formatter.format(taxi.fourSeaters?.get("open_door"))
+                fee_first.text = formatter.format(taxi.fourSeaters?.get("first"))
+                fee_over.text = formatter.format(taxi.fourSeaters?.get("after"))
 
-        fee_open_door7.text = formatter.format(taxi.sevenSeaters?.get("open_door"))
-        fee_first7.text = formatter.format(taxi.sevenSeaters?.get("first"))
-        fee_over7.text = formatter.format(taxi.sevenSeaters?.get("after"))
+                fee_open_door7.text = formatter.format(taxi.sevenSeaters?.get("open_door"))
+                fee_first7.text = formatter.format(taxi.sevenSeaters?.get("first"))
+                fee_over7.text = formatter.format(taxi.sevenSeaters?.get("after"))
+            }
+            taxi.fourSeaters != null && taxi.sevenSeaters == null->{
+
+                ct_trip.visibility = View.VISIBLE
+                price.text = formatter.format( taxi.priceFour)
+                ct_sevenSeater.visibility = View.GONE
+                fee_open_door.text = formatter.format(taxi.fourSeaters?.get("open_door"))
+                fee_first.text = formatter.format(taxi.fourSeaters?.get("first"))
+                fee_over.text = formatter.format(taxi.fourSeaters?.get("after"))
+            }
+            taxi.fourSeaters == null && taxi.sevenSeaters != null->{
+                ct_trip.visibility = View.VISIBLE
+                price.text = formatter.format( taxi.priceSeven)
+                ct_fourSeater.visibility = View.GONE
+                fee_open_door7.text = formatter.format(taxi.sevenSeaters?.get("open_door"))
+                fee_first7.text = formatter.format(taxi.sevenSeaters?.get("first"))
+                fee_over7.text = formatter.format(taxi.sevenSeaters?.get("after"))
+            }
+        }
 
         Glide.with(this)
                 .load(taxi.logo)
@@ -59,7 +81,6 @@ class TaxiDetailActivity: AppCompatActivity(){
         toolbar_detail.setNavigationOnClickListener {
             onBackPressed()
         }
-        checkType()
     }
 
     @SuppressLint("MissingPermission")
@@ -72,20 +93,6 @@ class TaxiDetailActivity: AppCompatActivity(){
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         if(requestCode == 1 )
             startCall()
-    }
-
-    fun checkType(){
-        when{
-            taxi.fourSeaters != null && taxi.sevenSeaters != null->{
-                constraintLayout.visibility = View.GONE
-            }
-            taxi.fourSeaters == null && taxi.sevenSeaters != null->{
-
-            }
-            taxi.fourSeaters != null && taxi.sevenSeaters == null->{
-
-            }
-        }
     }
 
 

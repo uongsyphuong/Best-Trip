@@ -119,17 +119,18 @@ class MapPresenter(view : MapInterface.View, var context: Context):MapInterface.
 					data?.distance = distanceKm
                     val priceFour = priceFour(distanceKm, data?.fourSeaters)?.let { it1 -> Math.round(it1) }
                     val priceSeven = priceSeven(distanceKm, data?.sevenSeaters)?.let { it1 -> Math.round(it1) }
-
-                    data?.priceFour = priceFour
-					data?.priceSeven = priceSeven
+					if(priceFour != null && priceSeven !=null) {
+						data?.priceFour = priceFour
+						data?.priceSeven = priceSeven
+					}
 					if (data != null) {
 						listTaxi.add(data)
 					}
 				}
 				listTaxi.sortBy{it?.priceFour}
-				listTaxiFour = listTaxi
+				listTaxiFour = listTaxi.toMutableList()
 				listTaxi.sortBy { it?.priceSeven }
-				listTaxiSeven = listTaxi
+				listTaxiSeven = listTaxi.toMutableList()
 
 				mView?.getListTaxiAndPriceSuccess(listTaxiFour,listTaxiSeven)
 			}

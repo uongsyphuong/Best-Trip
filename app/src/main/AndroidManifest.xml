@@ -82,6 +82,9 @@
             android:name=".taxiDetail.TaxiDetailActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:label="@string/title_activity_map"/>
+        <activity
+            android:name=".taxiResult.TaxiResultActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

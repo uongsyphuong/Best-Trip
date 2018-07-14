@@ -47,7 +47,9 @@ import vinova.intern.best_trip.log_in_out.LogScreenActivity
 import vinova.intern.best_trip.model.GetLocation
 import vinova.intern.best_trip.model.Taxi
 import vinova.intern.best_trip.model.User
+import vinova.intern.best_trip.taxiDetail.TaxiDetailActivity
 import vinova.intern.best_trip.taxiList.TaxiListActivity
+import vinova.intern.best_trip.taxiResult.TaxiResultActivity
 import java.text.DecimalFormat
 
 
@@ -454,21 +456,71 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 	}
 
 	override fun getListTaxiAndPriceSuccess(listTaxiFour: MutableList<Taxi?>, listTaxiSeven: MutableList<Taxi?>) {
-		listTaxiFour4 = listTaxiFour
-		listTaxiSeven7 = listTaxiSeven
-		var cardView : CardView = findViewById(R.id.itemOne)
-		setResult(cardView,listTaxiFour[0],true)
-
-		cardView = findViewById(R.id.itemTwo)
-		setResult(cardView,listTaxiFour[1],true)
-
-		cardView = findViewById(R.id.item7One)
-		setResult(cardView,listTaxiSeven[0],false)
-
-		cardView = findViewById(R.id.item7Two)
-		setResult(cardView,listTaxiSeven[1],false)
 		bottom_sheet_layout.visibility = View.VISIBLE
+		listTaxiFour4 = listTaxiFour.toMutableList()
+		listTaxiSeven7 = listTaxiSeven.toMutableList()
 
+		val cardView1 : CardView = findViewById(R.id.itemOne)
+		setResult(cardView1,listTaxiFour[0],true)
+		cardView1.setOnClickListener{
+			val bundle = Bundle()
+            listTaxiFour4[0]?.sevenSeaters =null
+			bundle.putParcelable("taxi", listTaxiFour4[0])
+			val intent = Intent (this, TaxiDetailActivity::class.java )
+			intent.putExtras(bundle)
+			startActivity(intent)
+		}
+
+        val cardView2 : CardView= findViewById(R.id.itemTwo)
+		setResult(cardView2,listTaxiFour[1],true)
+        cardView2.setOnClickListener{
+            val bundle = Bundle()
+            listTaxiFour4[1]?.sevenSeaters =null
+            bundle.putParcelable("taxi", listTaxiFour4[1])
+            val intent = Intent (this, TaxiDetailActivity::class.java )
+            intent.putExtras(bundle)
+            startActivity(intent)
+        }
+
+        val cardView3 : CardView= findViewById(R.id.item7One)
+		setResult(cardView3,listTaxiSeven[0],false)
+        cardView3.setOnClickListener{
+            val bundle = Bundle()
+            listTaxiSeven7[0]?.fourSeaters =null
+            bundle.putParcelable("taxi", listTaxiSeven7[0])
+            val intent = Intent (this, TaxiDetailActivity::class.java )
+            intent.putExtras(bundle)
+            startActivity(intent)
+        }
+
+        val cardView4 : CardView= findViewById(R.id.item7Two)
+		setResult(cardView4,listTaxiSeven[1],false)
+		bottom_sheet_layout.visibility = View.VISIBLE
+        cardView4.setOnClickListener{
+            val bundle = Bundle()
+            listTaxiSeven7[1]?.fourSeaters =null
+            bundle.putParcelable("taxi", listTaxiSeven7[1])
+            val intent = Intent (this, TaxiDetailActivity::class.java )
+            intent.putExtras(bundle)
+            startActivity(intent)
+        }
+
+		viewAllFourSeat.setOnClickListener {
+			val bundle = Bundle()
+			bundle.putParcelableArrayList("taxi", ArrayList(listTaxiFour4))
+			bundle.putBoolean("is4", true)
+			val intent = Intent (this, TaxiResultActivity::class.java )
+			intent.putExtras(bundle)
+			startActivity(intent)
+		}
+		viewAllSevenSeat.setOnClickListener {
+			val bundle = Bundle()
+			bundle.putParcelableArrayList("taxi", ArrayList(listTaxiSeven7))
+			bundle.putBoolean("is4", false)
+			val intent = Intent (this, TaxiResultActivity::class.java )
+			intent.putExtras(bundle)
+			startActivity(intent)
+		}
 	}
 
 	private fun setResult(cardView: CardView,taxi: Taxi?,is4 : Boolean){

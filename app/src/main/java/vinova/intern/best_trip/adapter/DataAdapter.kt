@@ -60,10 +60,7 @@ class DataAdapter(var context: Context) : RecyclerView.Adapter<DataAdapter.DataV
              image_taxi = itemView.findViewById(R.id.image_taxi)
              phone_taxi = itemView.findViewById(R.id.phone_taxi)
              name_taxi = itemView.findViewById(R.id.name_taxi)
-             itemView.setOnClickListener {
-
-
-             }
+             //itemView.setOnClickListener {            }
          }
      }
 
