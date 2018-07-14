@@ -75,5 +75,7 @@
     <string name="brand_comp">VinaSun</string>
     <string name="_4_seats">/4 seats</string>
     <string name="_7_seats">/7 seats</string>
+    <string name="fee_7seats">vlxx</string>
+    <string name="fee_breakdown">Fee Breakdown</string>
 
 </resources>
