@@ -164,7 +164,7 @@ class TaxiListActivity: AppCompatActivity(), TaxiListInterface.View, NavigationV
             override fun afterTextChanged(editable: Editable) {
                 Handler().postDelayed({
                     mPresenter.searchData(edt_search_taxi.text.toString(), adapter)
-                }, 2000)
+                }, 200)
             }
         })
 

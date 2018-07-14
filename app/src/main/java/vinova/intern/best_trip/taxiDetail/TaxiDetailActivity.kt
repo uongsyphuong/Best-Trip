@@ -26,7 +26,11 @@ class TaxiDetailActivity: AppCompatActivity(){
         setSupportActionBar(toolbar_detail)
         val bundle = intent.extras
         taxi = bundle.getParcelable("taxi")
+        val is4:Boolean = bundle.getBoolean("is4")
+        val is7:Boolean = bundle.getBoolean("is7")
         title = taxi.name
+        if (is4) taxi.sevenSeaters =null
+        if(is7) taxi.fourSeaters = null
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
 

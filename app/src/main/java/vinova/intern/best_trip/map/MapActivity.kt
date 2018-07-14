@@ -464,7 +464,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 		setResult(cardView1,listTaxiFour[0],true)
 		cardView1.setOnClickListener{
 			val bundle = Bundle()
-            listTaxiFour4[0]?.sevenSeaters =null
+            bundle.putBoolean("is4",true)
 			bundle.putParcelable("taxi", listTaxiFour4[0])
 			val intent = Intent (this, TaxiDetailActivity::class.java )
 			intent.putExtras(bundle)
@@ -475,7 +475,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 		setResult(cardView2,listTaxiFour[1],true)
         cardView2.setOnClickListener{
             val bundle = Bundle()
-            listTaxiFour4[1]?.sevenSeaters =null
+            bundle.putBoolean("is4",true)
             bundle.putParcelable("taxi", listTaxiFour4[1])
             val intent = Intent (this, TaxiDetailActivity::class.java )
             intent.putExtras(bundle)
@@ -486,7 +486,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 		setResult(cardView3,listTaxiSeven[0],false)
         cardView3.setOnClickListener{
             val bundle = Bundle()
-            listTaxiSeven7[0]?.fourSeaters =null
+            bundle.putBoolean("is7",true)
             bundle.putParcelable("taxi", listTaxiSeven7[0])
             val intent = Intent (this, TaxiDetailActivity::class.java )
             intent.putExtras(bundle)
@@ -498,7 +498,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 		bottom_sheet_layout.visibility = View.VISIBLE
         cardView4.setOnClickListener{
             val bundle = Bundle()
-            listTaxiSeven7[1]?.fourSeaters =null
+            bundle.putBoolean("is7",true)
             bundle.putParcelable("taxi", listTaxiSeven7[1])
             val intent = Intent (this, TaxiDetailActivity::class.java )
             intent.putExtras(bundle)

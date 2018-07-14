@@ -106,9 +106,8 @@ class MapPresenter(view : MapInterface.View, var context: Context):MapInterface.
 
         val distanceKm  = (Math.round((distance/1000)*10.0)/10.0).toFloat()
 		val mDatabaseReference = FirebaseDatabase.getInstance().reference.child("taxi")
-		var listTaxi: MutableList<Taxi?> = mutableListOf()
-		var listTaxiFour: MutableList<Taxi?> = mutableListOf()
-		var listTaxiSeven: MutableList<Taxi?> = mutableListOf()
+		val listTaxiFour: MutableList<Taxi?> = mutableListOf()
+		val listTaxiSeven: MutableList<Taxi?> = mutableListOf()
 
 		mDatabaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
 			override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -124,13 +123,12 @@ class MapPresenter(view : MapInterface.View, var context: Context):MapInterface.
 						data?.priceSeven = priceSeven
 					}
 					if (data != null) {
-						listTaxi.add(data)
+						listTaxiFour.add(data)
+						listTaxiSeven.add(data)
 					}
 				}
-				listTaxi.sortBy{it?.priceFour}
-				listTaxiFour = listTaxi.toMutableList()
-				listTaxi.sortBy { it?.priceSeven }
-				listTaxiSeven = listTaxi.toMutableList()
+				listTaxiFour.sortBy{it?.priceFour}
+				listTaxiSeven.sortBy { it?.priceSeven }
 
 				mView?.getListTaxiAndPriceSuccess(listTaxiFour,listTaxiSeven)
 			}
