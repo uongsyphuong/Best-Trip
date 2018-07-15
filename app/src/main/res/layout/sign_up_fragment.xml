@@ -72,6 +72,7 @@
             android:background="@android:color/transparent"
             android:text="@string/sign_up_with_email"
             android:textSize="20sp"
+            android:textColor="#0a0909"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/password" />

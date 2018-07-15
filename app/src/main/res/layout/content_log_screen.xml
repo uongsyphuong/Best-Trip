@@ -8,7 +8,7 @@
     tools:context=".log_in_out.LogScreenActivity"
     tools:showIn="@layout/app_bar_log_screen"
     tools:ignore="MissingDefaultResource"
-    android:background= "@mipmap/back_ground">
+    android:background= "@mipmap/background">
 
     <TextView
         android:id="@+id/best_trip"
