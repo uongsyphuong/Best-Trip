@@ -25,6 +25,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.material.navigation.NavigationView
+import kotlinx.android.synthetic.main.app_bar_taxi_list.*
 import kotlinx.android.synthetic.main.content_list_taxi.*
 import vinova.intern.best_trip.R
 import vinova.intern.best_trip.adapter.DataAdapter
@@ -46,6 +47,9 @@ class TaxiListActivity: AppCompatActivity(), TaxiListInterface.View, NavigationV
     private var gallery : TextView? = null
     private val CAMERA_REQUEST = 1888
     private val MY_CAMERA_PERMISSION_CODE = 100
+
+    private val END_SCALE = 0.7f
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -218,6 +222,20 @@ class TaxiListActivity: AppCompatActivity(), TaxiListInterface.View, NavigationV
                 this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         drawer_layout?.addDrawerListener(toggle)
         toggle.syncState()
+        drawer_layout?.addDrawerListener(object : DrawerLayout.SimpleDrawerListener(){
+            override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
+                val diffScaledOffset = slideOffset * (1 - END_SCALE)
+                val offsetScale = 1 - diffScaledOffset
+                app_bar_layout_taxi.scaleX = offsetScale
+	            app_bar_layout_taxi.scaleY = offsetScale
+
+                val  xOffset = drawerView.width * slideOffset
+                val  xOffsetDiff = app_bar_layout_taxi.width * diffScaledOffset / 2
+                val  xTranslation = xOffset - xOffsetDiff
+
+	            app_bar_layout_taxi.translationX = xTranslation
+            }
+        })
         nav_view?.setNavigationItemSelectedListener(this)
 	    nav_view?.menu?.getItem(1)?.isChecked = true
 

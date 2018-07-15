@@ -6,6 +6,7 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.location.Location
 import android.os.Bundle
 import android.os.Looper
@@ -79,6 +80,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 	private var user:User? = null
 	private var ori_desti : String = ""
 	private var disTime : Array<String> = arrayOf("","")
+	private val END_SCALE = 0.7f
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -237,12 +239,27 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 	}
 
 	private fun setNavigationDrawer(){
-		drawer_layout = findViewById<DrawerLayout>(R.id.drawer_layout)
+		drawer_layout = findViewById(R.id.drawer_layout)
 		nav_view = findViewById(R.id.nav_view)
 		val toggle = ActionBarDrawerToggle(
 				this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
 		drawer_layout?.addDrawerListener(toggle)
 		toggle.syncState()
+		drawer_layout?.setScrimColor(Color.TRANSPARENT)
+		drawer_layout?.addDrawerListener(object : DrawerLayout.SimpleDrawerListener(){
+			override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
+				val diffScaledOffset = slideOffset * (1 - END_SCALE)
+				val offsetScale = 1 - diffScaledOffset
+				app_bar_layout.scaleX = offsetScale
+				app_bar_layout.scaleY = offsetScale
+
+				val  xOffset = drawerView.width * slideOffset
+				val  xOffsetDiff = app_bar_layout.width * diffScaledOffset / 2
+				val  xTranslation = xOffset - xOffsetDiff
+
+				app_bar_layout.translationX = xTranslation
+			}
+		})
 		nav_view?.setNavigationItemSelectedListener(this)
 		nav_view?.menu?.getItem(0)?.isChecked = true
 		mapPresenter.getUser(FirebaseAuth.getInstance().uid)
