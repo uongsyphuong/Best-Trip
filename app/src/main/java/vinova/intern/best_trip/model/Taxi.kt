@@ -13,17 +13,17 @@ class Taxi :Parcelable {
     var about:String = ""
     var fourSeaters: HashMap<String,Float>? =null
     var sevenSeaters: HashMap<String,Float>? = null
-    var distance:Float? = null
-    var priceFour: Int? = null
-    var priceSeven: Int? =null
+    var distance:Float = 0f
+    var priceFour: Int = 0
+    var priceSeven: Int =0
 
     constructor(parcel: Parcel) : this() {
         name = parcel.readString()
         phone = parcel.readString()
         logo = parcel.readString()
         about = parcel.readString()
-        fourSeaters = parcel.readSerializable() as HashMap<String, Float>
-        sevenSeaters = parcel.readSerializable() as HashMap<String, Float>
+        fourSeaters = parcel.readSerializable() as HashMap<String, Float>?
+        sevenSeaters = parcel.readSerializable() as HashMap<String, Float>?
         distance = parcel.readFloat()
         priceFour = parcel.readInt()
         priceSeven = parcel.readInt()
@@ -39,9 +39,10 @@ class Taxi :Parcelable {
         parcel.writeString(about)
         parcel.writeSerializable(fourSeaters)
         parcel.writeSerializable(sevenSeaters)
-        parcel.writeValue(distance)
-        parcel.writeValue(priceFour)
-        parcel.writeValue(priceSeven)
+        parcel.writeFloat(distance)
+        parcel.writeInt(priceFour)
+        parcel.writeInt(priceSeven)
+
     }
 
     override fun describeContents(): Int {

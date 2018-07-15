@@ -34,14 +34,17 @@ class MapPresenter(view : MapInterface.View, var context: Context):MapInterface.
 	init {
 		mView?.setPresenter(this)
 		storage = FirebaseStorage.getInstance()
-		storageReference = storage?.getReference()
+		storageReference = storage?.reference
 	}
 
 	override fun selectImg(data: Intent, contentResolver: ContentResolver) {
+		mView?.showLoading(true)
+
 		val uri: Uri = data.data
 		try {
 			val bitmap : Bitmap = MediaStore.Images.Media.getBitmap(contentResolver, uri)
 			upload(bitmap)
+			mView?.showLoading(false)
 			mView?.setImg(bitmap)
 
 		} catch (e: IOException) {
@@ -50,8 +53,10 @@ class MapPresenter(view : MapInterface.View, var context: Context):MapInterface.
 	}
 
 	override fun takePhoto(data: Intent, contentResolver: ContentResolver) {
+		mView?.showLoading(true)
 		val bitmap = data.extras.get("data") as Bitmap
 		upload(bitmap)
+		mView?.showLoading(false)
 		mView?.setImg(bitmap)
 	}
 
@@ -61,6 +66,8 @@ class MapPresenter(view : MapInterface.View, var context: Context):MapInterface.
 	}
 
 	override fun drawRoute(ori: String, desti: String) {
+		mView?.showLoading(true)
+
 		CallApi.createService().getDirection(ori,desti,CallApi.Api_key).enqueue(
 				object : Callback<GetLocation>{
 					override fun onFailure(call: Call<GetLocation>?, t: Throwable?) {
@@ -68,6 +75,7 @@ class MapPresenter(view : MapInterface.View, var context: Context):MapInterface.
 					}
 
 					override fun onResponse(call: Call<GetLocation>?, response: Response<GetLocation>?) {
+						mView?.showLoading(false)
 						mView?.drawRoute(response?.body())
 					}
 				})
@@ -79,7 +87,6 @@ class MapPresenter(view : MapInterface.View, var context: Context):MapInterface.
 
 		val byteArrayOutputStream = ByteArrayOutputStream()
 		bitmap.compress(Bitmap.CompressFormat.PNG,100,byteArrayOutputStream)
-		Log.e("abcd", profileRef.toString())
 		profileRef?.putBytes(byteArrayOutputStream.toByteArray())?.addOnSuccessListener {
 			// success
 			profileRef.downloadUrl.addOnCompleteListener { taskSnapshot ->
@@ -88,27 +95,14 @@ class MapPresenter(view : MapInterface.View, var context: Context):MapInterface.
 				userReference.child(userRef?.uid.toString()).child("image").setValue(url)
 			}
 		}
-
-
-
-//			OnSuccessListener<UploadTask.TaskSnapshot> {
-//				it.metadata.
-//                val userReference: DatabaseReference = FirebaseDatabase.getInstance().reference.child("user")
-//				val text = it.uploadSessionUri?.path
-//				Log.e("abcd1", text)
-//
-//				userReference.child(userRef?.uid.toString()).child("image").setValue(it?.metadata?.path)
-
-
 	}
 
 	override fun calcPrice(distance: Float) {
-
+		mView?.showLoading(true)
         val distanceKm  = (Math.round((distance/1000)*10.0)/10.0).toFloat()
 		val mDatabaseReference = FirebaseDatabase.getInstance().reference.child("taxi")
-		var listTaxi: MutableList<Taxi?> = mutableListOf()
-		var listTaxiFour: MutableList<Taxi?> = mutableListOf()
-		var listTaxiSeven: MutableList<Taxi?> = mutableListOf()
+		val listTaxiFour: MutableList<Taxi?> = mutableListOf()
+		val listTaxiSeven: MutableList<Taxi?> = mutableListOf()
 
 		mDatabaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
 			override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -119,17 +113,18 @@ class MapPresenter(view : MapInterface.View, var context: Context):MapInterface.
 					data?.distance = distanceKm
                     val priceFour = priceFour(distanceKm, data?.fourSeaters)?.let { it1 -> Math.round(it1) }
                     val priceSeven = priceSeven(distanceKm, data?.sevenSeaters)?.let { it1 -> Math.round(it1) }
-
-                    data?.priceFour = priceFour
-					data?.priceSeven = priceSeven
+					if(priceFour != null && priceSeven !=null) {
+						data?.priceFour = priceFour
+						data?.priceSeven = priceSeven
+					}
 					if (data != null) {
-						listTaxi.add(data)
+						listTaxiFour.add(data)
+						listTaxiSeven.add(data)
 					}
 				}
-				listTaxi.sortBy{it?.priceFour}
-				listTaxiFour = listTaxi
-				listTaxi.sortBy { it?.priceSeven }
-				listTaxiSeven = listTaxi
+				listTaxiFour.sortBy{it?.priceFour}
+				listTaxiSeven.sortBy { it?.priceSeven }
+				mView?.showLoading(false)
 
 				mView?.getListTaxiAndPriceSuccess(listTaxiFour,listTaxiSeven)
 			}
@@ -182,10 +177,8 @@ class MapPresenter(view : MapInterface.View, var context: Context):MapInterface.
 			mDatabaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
 				override fun onDataChange(dataSnapshot: DataSnapshot) {
 					val user = dataSnapshot.getValue(User::class.java)
-					//mView?.showLoading(false)
 					mView?.getUserSuccess(user)
 				}
-
 				override fun onCancelled(p0: DatabaseError) {
 					// Failed to read value
 				}

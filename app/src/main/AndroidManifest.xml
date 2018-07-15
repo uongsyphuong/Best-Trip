@@ -79,7 +79,14 @@
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".taxiDetail.TaxiDetailActivity"
+<<<<<<< HEAD
             android:theme="@style/Theme.Design.Light.NoActionBar"/>
+=======
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".taxiResult.TaxiResultActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+>>>>>>> c65016356f346162580bcf157ce2d5c1197ee402
     </application>
 
 </manifest>

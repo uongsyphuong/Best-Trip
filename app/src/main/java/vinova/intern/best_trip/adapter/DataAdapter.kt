@@ -12,12 +12,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import vinova.intern.best_trip.taxiDetail.TaxiDetailActivity
-import com.google.android.gms.common.internal.DowngradeableSafeParcel.DowngradeableSafeParcelHelper.putParcelable
 import android.os.Bundle
-
-
-
-
 
 class DataAdapter(var context: Context) : RecyclerView.Adapter<DataAdapter.DataViewHolder>() {
 
@@ -60,10 +55,6 @@ class DataAdapter(var context: Context) : RecyclerView.Adapter<DataAdapter.DataV
              image_taxi = itemView.findViewById(R.id.image_taxi)
              phone_taxi = itemView.findViewById(R.id.phone_taxi)
              name_taxi = itemView.findViewById(R.id.name_taxi)
-             itemView.setOnClickListener {
-
-
-             }
          }
      }
 
@@ -73,4 +64,8 @@ class DataAdapter(var context: Context) : RecyclerView.Adapter<DataAdapter.DataV
          notifyDataSetChanged()
      }
 
+    fun clearData() {
+        taxiList.clear()
+        notifyDataSetChanged()
+    }
  }

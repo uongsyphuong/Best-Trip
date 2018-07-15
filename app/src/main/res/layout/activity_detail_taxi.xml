@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".taxiDetail.TaxiDetailActivity"
-    tools:ignore="MissingDefaultResource">
+    tools:ignore="MissingDefaultResource"
+    android:fitsSystemWindows="true">
     <include
         android:id="@id/appBarLayout"
         layout="@layout/app_bar_detail_taxi"/>
@@ -32,22 +33,26 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:drawableStart="@drawable/ic_placeholder"
-                android:text="@string/location"
+                android:drawablePadding="8dp"
+                android:text="@string/your_place"
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <EditText
+            <TextView
                 android:id="@+id/destination"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
                 android:cursorVisible="false"
                 android:drawableStart="@drawable/ic_location"
+                android:drawablePadding="8dp"
                 android:text="@string/destination"
+                android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -74,15 +79,15 @@
             android:layout_height="wrap_content">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constraintLayout"
+                android:id="@+id/ct_trip"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="8dp"
                 android:visibility="visible"
-                app:layout_constraintBottom_toTopOf="@+id/fee"
+                app:layout_constraintBottom_toTopOf="@+id/fee_brk"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="@+id/fee"
+                app:layout_constraintStart_toStartOf="@+id/fee_brk"
                 app:layout_constraintTop_toBottomOf="@+id/cardView"
                 app:layout_constraintVertical_chainStyle="spread_inside"
                 tools:ignore="NotSibling">
@@ -135,31 +140,30 @@
                             app:layout_constraintVertical_bias="0.00999999" />
 
                         <TextView
-                            android:id="@+id/fee_distance_4seats"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginBottom="8dp"
-                            android:text="@string/xnxx"
-                            android:textSize="20sp"
-                            app:layout_constraintBottom_toBottomOf="@+id/fee_4_seats"
-                            app:layout_constraintEnd_toStartOf="@+id/fee_4_seats"
-                            app:layout_constraintHorizontal_bias="1.0"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="@+id/fee_4_seats"
-                            app:layout_constraintVertical_bias="0.0" />
-
-                        <TextView
-                            android:id="@+id/fee_4_seats"
+                            android:id="@+id/vnd"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
-                            android:layout_marginBottom="8dp"
-                            android:text="@string/_4_seats"
-                            android:textSize="20sp"
-                            app:layout_constraintBottom_toBottomOf="parent"
+                            android:layout_marginEnd="8dp"
+                            android:text="@string/currency"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/price"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginBottom="8dp"
+                            android:text="@string/price_taxi"
+                            android:textSize="15sp"
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="1.0"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/vnd" />
 
 
                         <TextView
@@ -176,23 +180,10 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.cardview.widget.CardView>
 
-                <include
-                    android:id="@+id/fee_7seats"
-                    layout="@layout/trip_info_7seats"
-                    android:visibility="visible"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@+id/cardView3"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="@+id/cardView3"
-                    app:layout_constraintTop_toBottomOf="@+id/cardView3"
-                    app:layout_constraintVertical_bias="0.0" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
-                android:id="@+id/fee"
+                android:id="@+id/fee_brk"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -203,7 +194,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.126"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
+                app:layout_constraintTop_toBottomOf="@+id/ct_trip"
                 tools:ignore="MissingConstraints" />
 
             <androidx.cardview.widget.CardView
@@ -216,9 +207,10 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/fee">
+                app:layout_constraintTop_toBottomOf="@+id/fee_brk">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/ct_fourSeater"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
@@ -354,7 +346,7 @@
             </androidx.cardview.widget.CardView>
 
             <include
-                android:id="@+id/sevenSeat"
+                android:id="@+id/ct_sevenSeater"
                 layout="@layout/free_breakdown"
                 android:visibility="visible"
                 android:layout_width="0dp"
@@ -379,7 +371,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/sevenSeat" />
+                app:layout_constraintTop_toBottomOf="@+id/ct_sevenSeater" />
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardView5"

@@ -52,7 +52,7 @@ class TaxiListActivity: AppCompatActivity(), TaxiListInterface.View, NavigationV
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_list_taxi)
-        toolbar = findViewById(R.id.toolbar)
+        toolbar = findViewById(R.id.toolbar_detail)
         setSupportActionBar(toolbar)
         val mLayoutManager = LinearLayoutManager(this)
         list_taxi.layoutManager = mLayoutManager
@@ -61,6 +61,12 @@ class TaxiListActivity: AppCompatActivity(), TaxiListInterface.View, NavigationV
         list_taxi.adapter = adapter
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        swipeRefresh.setOnRefreshListener {
+            adapter.clearData()
+            mPresenter.getListTaxi()
+            swipeRefresh.isRefreshing = false
+        }
 
         mPresenter.getListTaxi()
 
@@ -164,7 +170,7 @@ class TaxiListActivity: AppCompatActivity(), TaxiListInterface.View, NavigationV
             override fun afterTextChanged(editable: Editable) {
                 Handler().postDelayed({
                     mPresenter.searchData(edt_search_taxi.text.toString(), adapter)
-                }, 2000)
+                }, 200)
             }
         })
 
