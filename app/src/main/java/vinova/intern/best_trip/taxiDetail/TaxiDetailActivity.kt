@@ -51,7 +51,8 @@ class TaxiDetailActivity: AppCompatActivity(){
             taxi.fourSeaters != null && taxi.sevenSeaters == null->{
 
                 ct_trip.visibility = View.VISIBLE
-                price.text = formatter.format( taxi.priceFour)
+                val price_ = "Price: ${formatter.format( taxi.priceFour)}VND"
+                price.text = price_
                 ct_sevenSeater.visibility = View.GONE
                 fee_open_door.text = formatter.format(taxi.fourSeaters?.get("open_door"))
                 fee_first.text = formatter.format(taxi.fourSeaters?.get("first"))
@@ -59,7 +60,8 @@ class TaxiDetailActivity: AppCompatActivity(){
             }
             taxi.fourSeaters == null && taxi.sevenSeaters != null->{
                 ct_trip.visibility = View.VISIBLE
-                price.text = formatter.format( taxi.priceSeven)
+                val price_ = "Price: ${formatter.format( taxi.priceSeven)}VND"
+                price.text = price_
                 ct_fourSeater.visibility = View.GONE
                 fee_open_door7.text = formatter.format(taxi.sevenSeaters?.get("open_door"))
                 fee_first7.text = formatter.format(taxi.sevenSeaters?.get("first"))
@@ -67,6 +69,9 @@ class TaxiDetailActivity: AppCompatActivity(){
             }
         }
         destination.text = intent.getStringExtra("desti")
+        val disTime = intent.getStringArrayExtra("disTime")
+        distance.text = disTime[0]
+        time.text= disTime[1]
 
         Glide.with(this)
                 .load(taxi.logo)

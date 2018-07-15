@@ -11,9 +11,15 @@
     <item name="android:textColorHint">@color/colorBlack</item>
 </style>
 
-<style name="AppTheme.NoActionBar">
+<style name="AppTheme_" parent="@style/Theme.AppCompat.Light.NoActionBar">
     <item name="windowActionBar">false</item>
     <item name="windowNoTitle">true</item>
+    <item name="colorPrimary">@color/colorPrimary</item>
+    <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+    <item name="colorAccent">@color/colorAccent</item>
+    <item name="fontFamily">@font/autour_one</item>
+    <item name="editTextColor">@color/colorBlack</item>
+    <item name="android:textColorHint">@color/colorBlack</item>
 </style>
 
 <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />

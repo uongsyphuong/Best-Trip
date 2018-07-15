@@ -39,7 +39,7 @@ class TaxiResultActivity: AppCompatActivity(){
         all_list_taxi.layoutManager = mLayoutManager
         adapter = TaxiResultAdapter()
         all_list_taxi.adapter = adapter
-        adapter.setData(taxi,intent.getStringExtra("desti"))
+        adapter.setData(taxi,intent.getStringExtra("desti"),intent.getStringArrayExtra("disTime"))
         destination.text = intent.getStringExtra("desti")
     }
 

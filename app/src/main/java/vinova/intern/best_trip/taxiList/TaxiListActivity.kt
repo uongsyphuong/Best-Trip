@@ -33,8 +33,6 @@ import vinova.intern.best_trip.map.MapActivity
 import vinova.intern.best_trip.model.Taxi
 import vinova.intern.best_trip.model.User
 
-
-@Suppress("UNREACHABLE_CODE")
 class TaxiListActivity: AppCompatActivity(), TaxiListInterface.View, NavigationView.OnNavigationItemSelectedListener{
 
     var mPresenter : TaxiListInterface.Presenter = TaxiListPresenter(this)
@@ -65,7 +63,6 @@ class TaxiListActivity: AppCompatActivity(), TaxiListInterface.View, NavigationV
         swipeRefresh.setOnRefreshListener {
             adapter.clearData()
             mPresenter.getListTaxi()
-            swipeRefresh.isRefreshing = false
         }
 
         mPresenter.getListTaxi()
@@ -76,7 +73,9 @@ class TaxiListActivity: AppCompatActivity(), TaxiListInterface.View, NavigationV
 
         setUser()
     }
+
     override fun getListTaxiSuccess(listTaxi: MutableList<Taxi?>) {
+        swipeRefresh.isRefreshing = false
         adapter.setData(listTaxi)
     }
 
@@ -100,6 +99,7 @@ class TaxiListActivity: AppCompatActivity(), TaxiListInterface.View, NavigationV
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        nav_view?.menu?.getItem(1)?.isChecked = true
         drawer_layout?.closeDrawer(GravityCompat.START)
         when (item.itemId) {
             R.id.home -> {
@@ -219,14 +219,18 @@ class TaxiListActivity: AppCompatActivity(), TaxiListInterface.View, NavigationV
         drawer_layout?.addDrawerListener(toggle)
         toggle.syncState()
         nav_view?.setNavigationItemSelectedListener(this)
+	    nav_view?.menu?.getItem(1)?.isChecked = true
+
     }
 
     private fun setUser(){
         val user = intent.getParcelableExtra<User>("user")
         val a = findViewById<NavigationView>(R.id.nav_view).getHeaderView(0)
-        a.findViewById<TextView>(R.id.user_name).text = user.username
-        a.findViewById<TextView>(R.id.user_email).text = user.email
-        Glide.with(this).load(user.image).into(a.findViewById(R.id.image_profile))
+        if (user !=null ){
+            a.findViewById<TextView>(R.id.user_name).text = user.username
+            a.findViewById<TextView>(R.id.user_email).text = user.email
+            Glide.with(this).load(user.image).into(a.findViewById(R.id.image_profile))
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

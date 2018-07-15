@@ -2,17 +2,17 @@ package vinova.intern.best_trip.adapter
 
 import android.content.Context
 import android.content.Intent
-import android.view.View
-import android.widget.ImageView
-import androidx.recyclerview.widget.RecyclerView
-import vinova.intern.best_trip.model.Taxi
-import android.widget.TextView
-import vinova.intern.best_trip.R
-import android.view.LayoutInflater
-import android.view.ViewGroup
-import com.bumptech.glide.Glide
-import vinova.intern.best_trip.taxiDetail.TaxiDetailActivity
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import vinova.intern.best_trip.R
+import vinova.intern.best_trip.model.Taxi
+import vinova.intern.best_trip.taxiDetail.TaxiDetailActivity
 
 class DataAdapter(var context: Context) : RecyclerView.Adapter<DataAdapter.DataViewHolder>() {
 
@@ -36,7 +36,7 @@ class DataAdapter(var context: Context) : RecyclerView.Adapter<DataAdapter.DataV
          holder.itemView.setOnClickListener {
              val bundle = Bundle()
              bundle.putParcelable("taxi", taxiList[position])
-             val intent = Intent (holder.itemView.context, TaxiDetailActivity::class.java )
+             val intent = Intent (holder.itemView.context, TaxiDetailActivity::class.java ).putExtra("disTime", arrayOf("",""))
              intent.putExtras(bundle)
              holder.itemView.context.startActivity(intent)
          }

@@ -78,6 +78,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 	private var constraintLayout : ConstraintLayout? = null
 	private var user:User? = null
 	private var ori_desti : String = ""
+	private var disTime : Array<String> = arrayOf("","")
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -128,8 +129,8 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 		 val latLng = LatLng(location.latitude, location.longitude)
 		 mMap.addCircle(CircleOptions().center(latLng))
 		 if (first_time){
-			 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12.0f))
-			 mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng))
+			 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16f))
+			 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12f))
 			 first_time = false
 		 }
 
@@ -149,8 +150,6 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 
 		mMap.setOnMyLocationButtonClickListener(object : GoogleMap.OnMyLocationClickListener, GoogleMap.OnMyLocationButtonClickListener {
 			override fun onMyLocationClick(p0: Location) {
-				startLat = p0.latitude
-				startLong = p0.longitude
 				mMap.addMarker(MarkerOptions().position(LatLng(p0.latitude,
 						p0.longitude)))
 				mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(p0.latitude,
@@ -160,21 +159,12 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 			}
 
 			override fun onMyLocationButtonClick(): Boolean {
-				mMap.setMinZoomPreference(1f)
-				mMap.setMaxZoomPreference(100f)
 				return false
 			}
 		})
-		mMap.setOnMyLocationClickListener { p0 ->
-			startLat = p0.latitude
-			startLong = p0.longitude
-			mMap.addMarker(MarkerOptions().position(LatLng(p0.latitude,
-					p0.longitude)))
-			mMap.setMaxZoomPreference(1000000000000000f)
-		}
 
 		mMap.setMinZoomPreference(1f)
-		mMap.setMaxZoomPreference(100f)
+		mMap.setMaxZoomPreference(100000f)
 	}
 
 
@@ -254,6 +244,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 		drawer_layout?.addDrawerListener(toggle)
 		toggle.syncState()
 		nav_view?.setNavigationItemSelectedListener(this)
+		nav_view?.menu?.getItem(0)?.isChecked = true
 		mapPresenter.getUser(FirebaseAuth.getInstance().uid)
 	}
 
@@ -362,6 +353,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 	}
 
 	override fun onNavigationItemSelected(item: MenuItem): Boolean {
+		nav_view?.menu?.getItem(0)?.isChecked = true
 		drawer_layout?.closeDrawer(GravityCompat.START)
 		when (item.itemId) {
 			R.id.home -> {
@@ -407,6 +399,8 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 				for (point in points)
 					polyline.add(point)
 				mapPresenter.calcPrice(getLocation.routes[0].legs[0].distance.value.toFloat())
+				disTime[0] = "Distance: ${getLocation.routes[0].legs[0].distance.text}"
+				disTime[1] = "Time: ${getLocation.routes[0].legs[0].duration.text}"
 			}
 		mMap.addPolyline(polyline.width(10f).color(R.color.colorAqua))
 
@@ -460,7 +454,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
             bundle.putBoolean("is4",true)
 			bundle.putParcelable("taxi", listTaxiFour4[0])
 			val intent = Intent (this, TaxiDetailActivity::class.java )
-			intent.putExtras(bundle).putExtra("desti",ori_desti)
+			intent.putExtras(bundle).putExtra("desti",ori_desti).putExtra("disTime",disTime)
 			startActivity(intent)
 		}
 
@@ -471,7 +465,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
             bundle.putBoolean("is4",true)
             bundle.putParcelable("taxi", listTaxiFour4[1])
             val intent = Intent (this, TaxiDetailActivity::class.java )
-            intent.putExtras(bundle).putExtra("desti",ori_desti)
+            intent.putExtras(bundle).putExtra("desti",ori_desti).putExtra("disTime",disTime)
             startActivity(intent)
         }
 
@@ -482,7 +476,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
             bundle.putBoolean("is7",true)
             bundle.putParcelable("taxi", listTaxiSeven7[0])
             val intent = Intent (this, TaxiDetailActivity::class.java )
-            intent.putExtras(bundle).putExtra("desti",ori_desti)
+            intent.putExtras(bundle).putExtra("desti",ori_desti).putExtra("disTime",disTime)
             startActivity(intent)
         }
 
@@ -494,7 +488,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
             bundle.putBoolean("is7",true)
             bundle.putParcelable("taxi", listTaxiSeven7[1])
             val intent = Intent (this, TaxiDetailActivity::class.java )
-            intent.putExtras(bundle).putExtra("desti",ori_desti)
+            intent.putExtras(bundle).putExtra("desti",ori_desti).putExtra("disTime",disTime)
             startActivity(intent)
         }
 
@@ -503,7 +497,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 			bundle.putParcelableArrayList("taxi", ArrayList(listTaxiFour4))
 			bundle.putBoolean("is4", true)
 			val intent = Intent (this, TaxiResultActivity::class.java )
-			intent.putExtras(bundle).putExtra("desti",ori_desti)
+			intent.putExtras(bundle).putExtra("desti",ori_desti).putExtra("disTime",disTime)
 			startActivity(intent)
 		}
 		viewAllSevenSeat.setOnClickListener {
@@ -511,7 +505,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 			bundle.putParcelableArrayList("taxi", ArrayList(listTaxiSeven7))
 			bundle.putBoolean("is4", false)
 			val intent = Intent (this, TaxiResultActivity::class.java )
-			intent.putExtras(bundle).putExtra("desti",ori_desti)
+			intent.putExtras(bundle).putExtra("desti",ori_desti).putExtra("disTime",disTime)
 			startActivity(intent)
 		}
 	}
