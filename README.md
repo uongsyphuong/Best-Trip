@@ -8,7 +8,7 @@ Time spent: **69** hours spent in total
 The following **required** functionality is completed:
 
 * [x] User can sign up, sign in to Best trip by account and facebook.
-	User can log out account
+	*User can log out account
 * [x] User can reset password by email.
 * [x] User can view the currently location from google map.
 * [x] User can search, view the destination from google map and show the direction from currently location to the destination.
@@ -39,8 +39,9 @@ The following **optional** features are implemented:
 
 Here's a walkthrough of implemented user stories:
 
-<img src='https://imgur.com/fiaKNcg' title='Twitter Client' width='' alt='Video Walkthrough' />
+<img src='https://imgur.com/fiaKNcg.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
+<img src='https://imgur.com/XLzIsI3.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
@@ -50,11 +51,11 @@ GIF created with [LiceCap](http://www.cockos.com/licecap/).
 ## Open-source libraries used
 
 - [Glide](http://inthecheesefactory.com/blog/get-to-know-glide-recommended-by-google/en) for more efficient image rendering.
-- [Retrofit]
+- [Retrofit] (http://square.github.io/retrofit/) - A type-safe HTTP client for Android
 
 ## License
 
-    Copyright 2018 [Team 3]
+    Copyright 2018 [Team 3 Intern Vinova - Leon, John, Anthony]
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
