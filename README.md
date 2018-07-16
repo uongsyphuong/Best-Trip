@@ -18,6 +18,7 @@ The following **required** functionality is completed:
 	User can view the trip information.
 	User can choice and call taxi for your trip.
 
+
 The following **optional** features are implemented:
 
 * [x] User can refresh list of taxi companies by pulling down to refresh (i.e pull-to-refresh) .
