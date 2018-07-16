@@ -14,9 +14,9 @@ The following **required** functionality is completed:
 * [x] User can search, view the destination from google map and show the direction from currently location to the destination.
 * [x] User can change avatar from gallery or camera.
 * [x] Users can view a list of taxi companies
-	User can click the item and view information of company. 
-	User can view the trip information.
-	User can choice and call taxi for your trip.
+	*User can click the item and view information of company. 
+	*User can view the trip information.
+	*User can choice and call taxi for your trip.
 
 
 The following **optional** features are implemented:
@@ -39,7 +39,7 @@ The following **optional** features are implemented:
 
 Here's a walkthrough of implemented user stories:
 
-<img src='https://imgur.com/qpbjZHd' title='Twitter Client' width='' alt='Video Walkthrough' />
+<img src='https://imgur.com/fiaKNcg' title='Twitter Client' width='' alt='Video Walkthrough' />
 
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
