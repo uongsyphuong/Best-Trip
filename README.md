@@ -51,7 +51,7 @@ GIF created with [LiceCap](http://www.cockos.com/licecap/).
 ## Open-source libraries used
 
 - [Glide](http://inthecheesefactory.com/blog/get-to-know-glide-recommended-by-google/en) for more efficient image rendering.
-- [Retrofit] (http://square.github.io/retrofit/) - A type-safe HTTP client for Android
+- [Retrofit](http://square.github.io/retrofit/) - A type-safe HTTP client for Android
 
 ## License
 
