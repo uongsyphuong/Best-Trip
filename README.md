@@ -1,7 +1,7 @@
 ?# Project 4 -  Best-Trip
 
-**Best-Trip** is an android app that allows a user to search the destination, view the Trip info and call taxi. 
-Time spent: **40** hours spent in total
+**Best-Trip** is an android app that allows a user to search the destination, view the Trip information and call taxi. 
+Time spent: **69** hours spent in total
 
 ## User Stories
 
@@ -12,9 +12,11 @@ The following **required** functionality is completed:
 * [x] User can reset password by email.
 * [x] User can view the currently location from google map.
 * [x] User can search, view the destination from google map and show the direction from currently location to the destination.
-* [x] User can change avatar from gallery memory or camera.
+* [x] User can change avatar from gallery or camera.
 * [x] Users can view a list of taxi companies
-	User can click the item and view information. 
+	User can click the item and view information of company. 
+	User can view the trip information.
+	User can choice and call taxi for your trip.
 
 The following **optional** features are implemented:
 
@@ -25,9 +27,12 @@ The following **optional** features are implemented:
 * [x] Using the FloatingActionButton for call taxi.
 * [x] Replace all icon drawables and other static image assets with vector drawables where appropriate. 
 * [x] Leverage the data binding support module to bind data into one or more activity or fragment layout templates.
-* [x] Replace Picasso with Glide for more efficient image rendering.
+* [x] Using Glide for more efficient image rendering.
 * [x] Use the [ConstraintLayout](https://developer.android.com/reference/android/support/constraint/ConstraintLayout) to display layout.
 * [x] Using animation for UI.
+* [x] Using firebase as server, and call API from it
+	Using retrofit and Gson
+* [x] Check network.
 
 ## Video Walkthrough
 
@@ -44,7 +49,7 @@ GIF created with [LiceCap](http://www.cockos.com/licecap/).
 ## Open-source libraries used
 
 - [Glide](http://inthecheesefactory.com/blog/get-to-know-glide-recommended-by-google/en) for more efficient image rendering.
-
+- [Retrofit]
 
 ## License
 
