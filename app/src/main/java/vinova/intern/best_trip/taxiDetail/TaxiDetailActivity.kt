@@ -10,6 +10,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import kotlinx.android.synthetic.main.activity_detail_taxi.*
 import kotlinx.android.synthetic.main.app_bar_detail_taxi.*
 import kotlinx.android.synthetic.main.free_breakdown.*
@@ -75,6 +76,7 @@ class TaxiDetailActivity: AppCompatActivity(){
 
         Glide.with(this)
                 .load(taxi.logo)
+                .apply(RequestOptions().placeholder(R.drawable.ic_users))
                 .into(image_taxi)
         about_taxi.text = taxi.about
 

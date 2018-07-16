@@ -25,6 +25,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException
 import com.google.android.gms.common.GooglePlayServicesRepairableException
 import com.google.android.gms.location.*
@@ -51,6 +52,7 @@ import vinova.intern.best_trip.model.User
 import vinova.intern.best_trip.taxiDetail.TaxiDetailActivity
 import vinova.intern.best_trip.taxiList.TaxiListActivity
 import vinova.intern.best_trip.taxiResult.TaxiResultActivity
+import vinova.intern.best_trip.utils.NetworkUtils
 import java.text.DecimalFormat
 
 
@@ -81,6 +83,8 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 	private var ori_desti : String = ""
 	private var disTime : Array<String> = arrayOf("","")
 	private val END_SCALE = 0.7f
+	val net = NetworkUtils()
+
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -262,6 +266,10 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 		})
 		nav_view?.setNavigationItemSelectedListener(this)
 		nav_view?.menu?.getItem(0)?.isChecked = true
+		if (!net.isNetworkAvailable(this) || !net.isOnline()){
+			Toast.makeText(this,"No internet connection",Toast.LENGTH_LONG).show()
+			return
+		}
 		mapPresenter.getUser(FirebaseAuth.getInstance().uid)
 	}
 
@@ -379,6 +387,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 			R.id.taxi -> {
 				val intent =Intent ( this, TaxiListActivity::class.java).putExtra("user",user)
 				startActivity(intent)
+				finish()
 			}
 			R.id.out -> {
 				mapPresenter.signOut()
@@ -545,6 +554,8 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, NavigationView.OnNa
 		val a = findViewById<NavigationView>(R.id.nav_view).getHeaderView(0)
 		a.findViewById<TextView>(R.id.user_name).text = user?.username
 		a.findViewById<TextView>(R.id.user_email).text = user?.email
-		Glide.with(this).load(user?.image).into(a.findViewById(R.id.image_profile))
+		Glide.with(this).load(user?.image)
+				.apply(RequestOptions().placeholder(R.drawable.ic_users))
+				.into(a.findViewById(R.id.image_profile))
 	}
 }

@@ -15,7 +15,9 @@ class SignUpPresenter(view: SignUpInterface.View) :SignUpInterface.Presenter {
     }
 
     override fun createNewAccount(username:String,email: String, pass: String) {
-        if (username == ""|| email != "" || pass != ""){
+        mView?.showLoading(true)
+        if (username == ""|| email == "" || pass == ""){
+            mView?.showLoading(false)
             mView?.showError("You must fill up all field")
             return
         }
@@ -25,26 +27,29 @@ class SignUpPresenter(view: SignUpInterface.View) :SignUpInterface.Presenter {
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         // Sign in success, update UI with the signed-in user's information
-                        val userId = mAuth.currentUser!!.uid
+                        val userId = mAuth.currentUser?.uid
 
                         //Verify Email
                         val mUser = mAuth.currentUser
-                        mView?.showLoading(true)
                         mUser?.sendEmailVerification()?.addOnCompleteListener { task1 ->
                             if (task1.isSuccessful) {
                                 mView?.showLoading(false)
                                 mView?.signUpSuccess()
                             } else {
+                                mView?.showLoading(false)
                                 mView?.showError("Failed to verify")
 
                             }
                         }
                         //update user profile information
-                        val currentUserDb = mDatabaseReference!!.child("user").child(userId)
-                        currentUserDb.child("username").setValue(username)
-                        currentUserDb.child("email").setValue(email)
+                        if(userId != null) {
+                            val currentUserDb = mDatabaseReference!!.child("user").child(userId)
+                            currentUserDb.child("username").setValue(username)
+                            currentUserDb.child("email").setValue(email)
+                        }
                     } else {
                         // If sign in fails, display a message to the user.
+                        mView?.showLoading(false)
                         mView?.showError("Authentication failed")
                     }
                 }

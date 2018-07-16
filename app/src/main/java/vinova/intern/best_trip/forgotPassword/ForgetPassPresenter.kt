@@ -8,13 +8,15 @@ class ForgetPassPresenter (view:ForgetPassInterface.View) :ForgetPassInterface.P
         mView?.setPresenter(this)
     }
     override fun sendPasswordResetEmail(email: String) {
-
+        mView?.showLoading(true)
         FirebaseAuth.getInstance()
                 .sendPasswordResetEmail(email)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
+                        mView?.showLoading(false)
                         mView?.success()
                     } else {
+                        mView?.showLoading(false)
                         mView?.showError("No user found with this email.")
                     }
                 }

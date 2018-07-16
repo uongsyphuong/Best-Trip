@@ -7,21 +7,24 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
+import com.google.android.material.tabs.TabLayout
 import vinova.intern.best_trip.R
+import vinova.intern.best_trip.utils.NetworkUtils
 
-class SignUpActivity : Fragment(),SignUpInterface.View {
+class SignUpFragment : Fragment(),SignUpInterface.View {
 	var mPresenter : SignUpInterface.Presenter = SignUpPresenter(this)
 	var user_ : EditText? = null
 	var email_ : EditText? = null
 	var pass_ : EditText? = null
 	var btnSignup : Button? = null
 	var progressBar : ProgressBar? = null
+    val net = NetworkUtils()
 
 	override fun signUpSuccess() {
-		activity?.findViewById<ViewPager>(R.id.viewPager)?.setCurrentItem(0,true)
 		user_?.setText("", TextView.BufferType.EDITABLE)
 		email_?.setText("", TextView.BufferType.EDITABLE)
 		pass_?.setText("", TextView.BufferType.EDITABLE)
+        activity?.findViewById<ViewPager>(R.id.view_pager)?.setCurrentItem(0,true)
 	}
 
 	override fun setPresenter(presenter: SignUpInterface.Presenter) {
@@ -55,6 +58,10 @@ class SignUpActivity : Fragment(),SignUpInterface.View {
 
 	fun setListener(){
 		btnSignup?.setOnClickListener {
+            if (!net.isNetworkAvailable(activity) || !net.isOnline()){
+                Toast.makeText(activity,"No internet connection",Toast.LENGTH_LONG).show()
+                return@setOnClickListener
+            }
 			mPresenter.createNewAccount(user_?.text.toString(),email_?.text.toString(),pass_?.text.toString())
 		}
 	}

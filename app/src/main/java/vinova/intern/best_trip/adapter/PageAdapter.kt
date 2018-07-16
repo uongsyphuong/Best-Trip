@@ -3,17 +3,17 @@ package vinova.intern.best_trip.adapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
-import vinova.intern.best_trip.signIn.SignInActivity
-import vinova.intern.best_trip.signUp.SignUpActivity
+import vinova.intern.best_trip.signIn.SignInFragment
+import vinova.intern.best_trip.signUp.SignUpFragment
 
 class PageAdapter(fm: FragmentManager?) : FragmentPagerAdapter(fm) {
 
 	override fun getItem(position: Int): Fragment {
 		val frag : Fragment
 		when(position){
-			0 -> frag = SignInActivity()
-			1 -> frag = SignUpActivity()
-			else -> frag = SignInActivity()
+			0 -> frag = SignInFragment()
+			1 -> frag = SignUpFragment()
+			else -> frag = SignInFragment()
 		}
 		return frag
 	}

@@ -14,10 +14,11 @@ import com.facebook.FacebookException
 import com.facebook.login.LoginResult
 import com.facebook.login.widget.LoginButton
 import vinova.intern.best_trip.R
-import vinova.intern.best_trip.forgotPassword.ForgetPassActivity
+import vinova.intern.best_trip.forgotPassword.ForgetPassFragment
 import vinova.intern.best_trip.map.MapActivity
+import vinova.intern.best_trip.utils.NetworkUtils
 
-class SignInActivity : Fragment(),SignInInterface.View{
+class SignInFragment : Fragment(),SignInInterface.View{
 
 	var mPresenter : SignInInterface.Presenter = SignInPresenter(this)
 	var imgbtn: Button? = null
@@ -30,6 +31,7 @@ class SignInActivity : Fragment(),SignInInterface.View{
 	var face : LoginButton?=null
 	var callBackManager : CallbackManager? = null
 	var loader: ProgressBar? = null
+	val net : NetworkUtils = NetworkUtils()
 
 	override fun signInSuccess() {
 		goToMapActivity()
@@ -69,7 +71,7 @@ class SignInActivity : Fragment(),SignInInterface.View{
 		forgetBtn = view.findViewById(R.id.forgot_password)
 		face = view.findViewById(R.id.faceLogin)
 		loader = view.findViewById(R.id.loader)
-		fragmentManager?.beginTransaction()?.replace(R.id.forget_frag,ForgetPassActivity())?.addToBackStack(null)?.commit()
+		fragmentManager?.beginTransaction()?.replace(R.id.forget_frag,ForgetPassFragment())?.addToBackStack(null)?.commit()
 		setListener()
 	}
 
@@ -85,6 +87,10 @@ class SignInActivity : Fragment(),SignInInterface.View{
 
 	fun setListener(){
 		imgbtn?.setOnClickListener {
+			if (!net.isNetworkAvailable(activity) || !net.isOnline()){
+				Toast.makeText(activity,"No internet connection",Toast.LENGTH_LONG).show()
+				return@setOnClickListener
+			}
 			face?.fragment = this
 			callBackManager = CallbackManager.Factory.create()
 			face?.setReadPermissions("email")
@@ -104,6 +110,10 @@ class SignInActivity : Fragment(),SignInInterface.View{
 			face?.performClick()
 		}
 		emailBtn?.setOnClickListener{
+			if (!net.isNetworkAvailable(activity) || !net.isOnline()){
+				Toast.makeText(activity,"No internet connection",Toast.LENGTH_LONG).show()
+				return@setOnClickListener
+			}
 			val user_name = user?.text.toString()
 			val password = pass?.text.toString()
 			mPresenter.loginUser(user_name,password)

@@ -33,6 +33,7 @@ import vinova.intern.best_trip.log_in_out.LogScreenActivity
 import vinova.intern.best_trip.map.MapActivity
 import vinova.intern.best_trip.model.Taxi
 import vinova.intern.best_trip.model.User
+import vinova.intern.best_trip.utils.NetworkUtils
 
 class TaxiListActivity: AppCompatActivity(), TaxiListInterface.View, NavigationView.OnNavigationItemSelectedListener{
 
@@ -49,7 +50,7 @@ class TaxiListActivity: AppCompatActivity(), TaxiListInterface.View, NavigationV
     private val MY_CAMERA_PERMISSION_CODE = 100
 
     private val END_SCALE = 0.7f
-
+    val net = NetworkUtils()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,7 +70,12 @@ class TaxiListActivity: AppCompatActivity(), TaxiListInterface.View, NavigationV
             mPresenter.getListTaxi()
         }
 
-        mPresenter.getListTaxi()
+        if (!net.isNetworkAvailable(this) || !net.isOnline()){
+            Toast.makeText(this,"No internet connection",Toast.LENGTH_LONG).show()
+            return
+        }
+        else
+            mPresenter.getListTaxi()
 
         setListener()
 
